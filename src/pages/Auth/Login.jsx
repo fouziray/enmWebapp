@@ -10,11 +10,15 @@ import {
 } from '@mui/material';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
 import AuthOutlet from './AuthOutlet';
+import { login } from "@/features/auth";
+import { useDispatch, useSelector } from "react-redux";
 
 function Login() {
+  
+  const { isLoggedIn } = useSelector((state) => state.auth);
   const email = useRef(null);
   const password = useRef(null);
   const navigate = useNavigate();
@@ -22,9 +26,19 @@ function Login() {
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
   
-  const handleLogin=() => navigate('/home');
+  const dispatch = useDispatch();
+  const handleLogin=() => {
+      navigate('/profile');   
+  }
+  const [loggedUi,setLoggedUi]=useState(false);
+
+  useEffect(()=>{
+    if(loggedUi)
+      handleLogin();
+  },[loggedUi]);
+
   const loginHandler = async (e) => {
-    e.preventDefault();
+      e.preventDefault();
     const user = email.current.value.replace(/\s+/g, '');
     const pwd = password.current.value.replace(/\s+/g, '');
     if (user === '') {
@@ -35,8 +49,30 @@ function Login() {
       password.current.focus();
     } else {
       // do login stuff
+        
+        handleLogIn(user,pwd);
+       // handleLogin();
+ 
     }
-    handleLogin()
+  };
+  const handleLogIn = (username,password) => {
+    //const { username, password } = {username, password};
+            //setLoading(true);
+    console.log("this is user", username, password);
+    dispatch(login({ username, password }))
+      .unwrap()
+      .then(() => {
+  
+        if(isLoggedIn)
+          handleLogin("/profile");
+          setLoggedUi(True);
+      
+    })
+      .catch(() => {
+        //setLoading(false);
+      });
+
+ 
   };
 
   /** Focus email input when component mounted. */
@@ -48,7 +84,7 @@ function Login() {
     <AuthOutlet header={undefined}>
       <TextField
         inputRef={email}
-        type="email"
+        type="text"
         label="E-mail"
         variant="outlined"
         autoComplete="off"

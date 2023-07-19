@@ -7,7 +7,15 @@ import {
 import { useSelector } from 'react-redux';
 import { selectMode } from '@/features/user/userSlice';
 
+import { createPalette } from './create-palette';
+import { createComponents } from './create-components';
+import { createShadows } from './create-shadows';
+import { createTypography } from './create-typography';
 function AppThemeProvider({ children }) {
+  const palette = createPalette();
+  const components = createComponents({ palette });
+  const shadows = createShadows();
+  const typography = createTypography();
   const mode = useSelector(selectMode);
   const theme = responsiveFontSizes(
     createTheme({
@@ -74,7 +82,7 @@ function AppThemeProvider({ children }) {
         MuiCssBaseline: {
           styleOverrides: {
             body: {
-              backgroundColor: '#000',
+              backgroundColor: '#F5F5F5',
               color: '#fff',
               height: '100%',
             },
@@ -101,6 +109,22 @@ function AppThemeProvider({ children }) {
           },
         },
       },
+      breakpoints: {
+        values: {
+          xs: 0,
+          sm: 600,
+          md: 900,
+          lg: 1200,
+          xl: 1440
+        }
+      },
+      components,
+      palette,
+      shadows,
+      shape: {
+        borderRadius: 8
+      },
+      typography,
     }),
   );
 

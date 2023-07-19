@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer components {
+    .message-card {
+        @apply rounded-xl bg-tahit focus:pointer-events-auto cursor-pointer
+    }
+
+
+    .badgeLang {
+        @apply h-6 w-6 rounded-md bg-gray-50 text-gray-800 align-bottom
+    }
+    
+}
