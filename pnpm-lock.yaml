@@ -28,6 +28,9 @@ dependencies:
   '@reduxjs/toolkit':
     specifier: https://pkg.csb.dev/reduxjs/redux-toolkit/commit/9b1acb3d/@reduxjs/toolkit
     version: '@pkg.csb.dev/reduxjs/redux-toolkit/commit/9b1acb3d/@reduxjs/toolkit(react-redux@8.0.5)(react@18.2.0)'
+  '@types/react-transition-group':
+    specifier: ^4.4.6
+    version: 4.4.6
   apexcharts:
     specifier: ^3.41.0
     version: 3.41.0
@@ -58,6 +61,9 @@ dependencies:
   react-router-dom:
     specifier: ^6.10.0
     version: 6.10.0(react-dom@18.2.0)(react@18.2.0)
+  react-transition-group:
+    specifier: ^4.4.5
+    version: 4.4.5(react-dom@18.2.0)(react@18.2.0)
   simplebar-react:
     specifier: ^3.2.4
     version: 3.2.4(react@18.2.0)
@@ -2638,7 +2644,7 @@ packages:
       '@mui/types': 7.2.4(@types/react@18.2.0)
       '@mui/utils': 5.12.0(react@18.2.0)
       '@types/react': 18.2.0
-      '@types/react-transition-group': 4.4.5
+      '@types/react-transition-group': 4.4.6
       clsx: 1.2.1
       csstype: 3.1.2
       prop-types: 15.8.1
@@ -3355,8 +3361,8 @@ packages:
       '@types/react': 18.2.0
     dev: false
 
-  /@types/react-transition-group@4.4.5:
-    resolution: {integrity: sha512-juKD/eiSM3/xZYzjuzH6ZwpP+/lejltmiS3QEzV/vmb/Q8+HfDmxu+Baga8UEMGBqV88Nbg4l2hY/K2DkyaLLA==}
+  /@types/react-transition-group@4.4.6:
+    resolution: {integrity: sha512-VnCdSxfcm08KjsJVQcfBmhEQAPnLB8G08hAxn39azX1qYBQ/5RVQuoHuKIcfKOdncuaUvEpFKFzEvbtIMsfVew==}
     dependencies:
       '@types/react': 18.2.0
     dev: false

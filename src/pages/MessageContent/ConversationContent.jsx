@@ -35,7 +35,6 @@ function ConversationContent() {
           React + Redux + MuI + Axios + ESlint + Prettier
         </Typography>
       </Stack>
-      <Xwrapper>
       <Stack className='bg-white  p-8 rounded-xl drop-shadow-md' spacing={2}>
         {conversation.map((event,index)=>(<BasicCard key={index} id={index} text={event.data.text} timestamp={event.timestamp} source="@/assets/avata1.jpg"   ></BasicCard>))}
         { isConversationLoading && <CircularProgress /> }
@@ -43,7 +42,6 @@ function ConversationContent() {
 
       
     </Stack>
-    </Xwrapper>
       <TemplateTester />
       <Counter />
     </Container>

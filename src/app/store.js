@@ -6,6 +6,9 @@ import messageReducer from '@/features/message/messageSlice';
 import conversationReducer from '@/features/conversation/conversationSlice';
 import apiSlice from './api/apiSlice';
 import sitesReducer from '@/features/site/siteSlice';
+import sitecreationReducer from '@/features/site/siteCreationSlice';
+
+
 const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
@@ -15,6 +18,7 @@ const store = configureStore({
     message: messageReducer,
     conversation: conversationReducer,
     sites: sitesReducer,
+    sitecreated: sitecreationReducer,
   },
   middleware: (getdefaultMiddleware) =>
     getdefaultMiddleware().concat(apiSlice.middleware),

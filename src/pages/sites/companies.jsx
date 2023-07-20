@@ -9,6 +9,7 @@ import {
   Pagination,
   Stack,
   SvgIcon,
+  Modal,
   Typography,
   Unstable_Grid2 as Grid
 } from '@mui/material';
@@ -18,7 +19,8 @@ import { CompaniesSearch } from '@/sections/companies/companies-search';
 import { useDispatch, useSelector  } from "react-redux";
 import { homeMessages, selectMessage, selectMessageLoad } from '@/features/message/messageSlice.js';
 import { sitesTech, selectSites, selectSitesLoad } from '@/features/site/siteSlice.js';
-
+import { AccountProfileDetails } from '@/sections/companies/account-profile-details';
+import CSVReader from '@/components/CSVReader';
 const companies = [
   {
     id: '2569ce0d517a7f06d3ea1f24',
@@ -67,6 +69,10 @@ function sliceIntoChunks(arr, chunkSize) {
 function Page (){
   const dispatch = useDispatch();
   //const  {message}  = useSelector((state) => state.message);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const sites = useSelector(selectSites);
   const sitesLoading= useSelector(selectSitesLoad);
   const handleSites = () => {
@@ -78,12 +84,10 @@ function Page (){
 
   useEffect(()=>{
      handleSites();
-
     console.log(sites);
   },[]
     );
     useEffect(()=>{
-    
      setCurrentSites(sites)
      console.log("sites");
    },[sites]
@@ -92,14 +96,37 @@ function Page (){
 
 const chunkedSites = sliceIntoChunks(companies,3);
 const [currentSites,setCurrentSites]=useState(sites)
+const [sitesLoadingState,setSitesLoadingState]=useState(sitesLoading)
 const [page, setPage] = useState(1);
 const handleChange = (event, value) => {
   setCurrentSites(chunkedSites[page-1])
   setPage(value);
 };
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  borderRadius: '30px',
+  p: 4,
+};
   return(
   <>
-
+    <div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+        <AccountProfileDetails/>
+        </Box>
+      </Modal>
+    </div>
     <Box
       component="main"
       sx={{
@@ -116,7 +143,7 @@ const handleChange = (event, value) => {
           >
             <Stack spacing={1}>
               <Typography variant="h4">
-                Companies
+                Sites
               </Typography>
               <Stack
                 alignItems="center"
@@ -143,6 +170,7 @@ const handleChange = (event, value) => {
                 >
                   Export
                 </Button>
+                <CSVReader/>
               </Stack>
             </Stack>
             <div>
@@ -152,6 +180,7 @@ const handleChange = (event, value) => {
                     <PlusIcon />
                   </SvgIcon>
                 )}
+                onClick={handleOpen}
                 variant="contained"
               >
                 Add
@@ -163,13 +192,12 @@ const handleChange = (event, value) => {
             container
             spacing={3}
           >
-            {currentSites.map((company) => (
+            {currentSites==null ? '' : currentSites.map((company) => (
               <Grid
                 xs={12}
                 md={6}
                 lg={4}
                 key={company.id}
-
               >
                 <CompanyCard company={company} />
               </Grid>
