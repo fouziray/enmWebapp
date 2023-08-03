@@ -1,16 +1,18 @@
+
+
 import {createAction ,createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 //import {message} from '@/services/message.service';
-import siteService from "@/services/site.service.js";
+import driveTestService from "@/services/drivetest.service.js";
 
 //const user = JSON.parse(localStorage.getItem("user"));
 
- export const sitesCreationTech = createAsyncThunk(
-  'sitesCreation/sitesCreationTech',
-  async (values,thunkAPI) => {
+ export const dtSessions = createAsyncThunk(
+  'dtsession/dtSessions',
+  async (_,thunkAPI) => {
     try {
-      const data = await siteService.create_site(values);
-      const me={ site: data };
+      const data = await driveTestService.dtSessions();
+      const me={ dtsession: data };
       return me;
     } catch (error) {
       const message =
@@ -25,22 +27,23 @@ import siteService from "@/services/site.service.js";
   }
 );
 
-const initialState = { site: [] };
+const initialState = { dtsession: [] };
 
-  export const siteCreationSlice = createSlice({
-  name: 'sitesCreation',
+  export const dtsessionsSlice = createSlice({
+  name: 'dtsession',
   initialState,
   extraReducers: (builder) => {
     builder
-      .addCase(sitesCreationTech.pending,(state) => {
+      .addCase(dtSessions.pending,(state) => {
         console.log("loading"); 
         state.loading = true ;
        })
-      .addCase(sitesCreationTech.fulfilled, (state, action) => {
+      .addCase(dtSessions.fulfilled, (state, action) => {
         console.log("action");
-        state.sitesCreation = action.payload.site;
-        console.log('State:', state.site);
+        state.dtsession = action.payload.dtsession;
+        console.log('State:', state.dtsession);
         state.loading= false;
+        console.log(state.loading);
 
       });
      // [homeMessages.fulfilled]: (state, action) => {
@@ -49,6 +52,6 @@ const initialState = { site: [] };
 
 }
 });
-export const selectCreatedSite = (state) => state.site.sitesCreation;
-export const selectCreatedSiteLoad= (state) => state.site.loading;
-export default  siteCreationSlice.reducer;
+export const selectDtSessions = (state) => state.dtsession.dtsession;
+export const selectDtSessionsLoad = (state) => state.dtsession.loading;
+export default  dtsessionsSlice.reducer;

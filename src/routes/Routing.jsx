@@ -7,7 +7,8 @@ import MessageContent from '@/pages/MessageContent/MessageContent';
 import ConversationContent from '@/pages/MessageContent/ConversationContent';
 import ChatMessage  from '@/pages/chat/chatPage';
 import ChatApp from '@/pages/chat/newchat/appchat';
-import Sites from '@/pages/sites/companies';
+import Sites from '@/pages/sites/sites';
+import Dtest from '@/pages/DtSession/dtsession';
 function Routing() {
   return (
     <Routes>
@@ -19,6 +20,7 @@ function Routing() {
       <Route path="/chat/" element={<ChatMessage/>} />
       <Route path="/newchat" element={<ChatApp />} /> 
       <Route path="/sites" element={<Sites/>}/>
+      <Route path="/drivetest" element={<Dtest/>} />
 
     </Routes>
   );

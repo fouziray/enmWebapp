@@ -1,16 +1,16 @@
 import {createAction ,createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 //import {message} from '@/services/message.service';
-import siteService from "@/services/site.service.js";
+import driveTestService from "@/services/drivetest.service.js";
 
 //const user = JSON.parse(localStorage.getItem("user"));
 
- export const sitesCreationTech = createAsyncThunk(
-  'sitesCreation/sitesCreationTech',
-  async (values,thunkAPI) => {
+ export const usersPerGroups = createAsyncThunk(
+  'usersgroups/usersPerGroups',
+  async (_,thunkAPI) => {
     try {
-      const data = await siteService.create_site(values);
-      const me={ site: data };
+      const data = await driveTestService.usersPerGroups();
+      const me={ usersgroups: data };
       return me;
     } catch (error) {
       const message =
@@ -25,22 +25,23 @@ import siteService from "@/services/site.service.js";
   }
 );
 
-const initialState = { site: [] };
+const initialState = { usersgroups: [] };
 
-  export const siteCreationSlice = createSlice({
-  name: 'sitesCreation',
+  export const usersgroupsSlice = createSlice({
+  name: 'usersgroups',
   initialState,
   extraReducers: (builder) => {
     builder
-      .addCase(sitesCreationTech.pending,(state) => {
+      .addCase(usersPerGroups.pending,(state) => {
         console.log("loading"); 
         state.loading = true ;
        })
-      .addCase(sitesCreationTech.fulfilled, (state, action) => {
+      .addCase(usersPerGroups.fulfilled, (state, action) => {
         console.log("action");
-        state.sitesCreation = action.payload.site;
-        console.log('State:', state.site);
+        state.usersgroups = action.payload.usersgroups;
+        console.log('State:', state.usersgroups);
         state.loading= false;
+        console.log(state.loading);
 
       });
      // [homeMessages.fulfilled]: (state, action) => {
@@ -49,6 +50,6 @@ const initialState = { site: [] };
 
 }
 });
-export const selectCreatedSite = (state) => state.site.sitesCreation;
-export const selectCreatedSiteLoad= (state) => state.site.loading;
-export default  siteCreationSlice.reducer;
+export const selectUsersGroups = (state) => state.usersgroups.usersgroups;
+export const selectUsersGroupsLoad= (state) => state.usersgroups.loading;
+export default  usersgroupsSlice.reducer;

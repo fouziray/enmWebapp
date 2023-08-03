@@ -1,11 +1,32 @@
 // components/CSVSelector.tsx
 import React from "react";
-
+import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
+import {
+  SvgIcon,
+  Button
+} from '@mui/material'
 type Props = {
   onChange(data: string[][]): void;
 };
-
+const importButton=() =>{
+  return (
+    <Button
+                  color="inherit"
+                  startIcon={(
+                    <SvgIcon fontSize="small">
+                      <ArrowUpOnSquareIcon />
+                    </SvgIcon>
+                    
+                  )}
+                  
+                >
+                  Import
+                </Button>
+  );
+};
 const CSVSelector = ({ onChange }: Props) => {
+  //const fileInputRef = React.createRef();  
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       try {
@@ -34,7 +55,23 @@ const CSVSelector = ({ onChange }: Props) => {
     }
   };
 
-  return <input type="file" accept=".csv" onChange={handleFileChange} />;
+  return (    <Button
+    color="inherit"
+    onClick={()=>fileInputRef.current.click()}
+    startIcon={(
+      <SvgIcon fontSize="small">
+        <ArrowUpOnSquareIcon />
+      </SvgIcon>
+      
+    )}
+    
+  ><input 
+  type="file"
+  accept=".csv" 
+  ref={fileInputRef}
+  onChange={handleFileChange} 
+  hidden
+  />Import</Button>);
 };
 
 export default CSVSelector;

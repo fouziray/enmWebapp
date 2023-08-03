@@ -11,13 +11,13 @@ import {
   SvgIcon,
   Modal,
   Typography,
+  CircularProgress,
   Unstable_Grid2 as Grid
 } from '@mui/material';
 import { Layout as DashboardLayout } from '@/layouts/dashboard/layout';
 import { CompanyCard } from '@/sections/companies/company-card';
 import { CompaniesSearch } from '@/sections/companies/companies-search';
 import { useDispatch, useSelector  } from "react-redux";
-import { homeMessages, selectMessage, selectMessageLoad } from '@/features/message/messageSlice.js';
 import { sitesTech, selectSites, selectSitesLoad } from '@/features/site/siteSlice.js';
 import { AccountProfileDetails } from '@/sections/companies/account-profile-details';
 import CSVReader from '@/components/CSVReader';
@@ -84,6 +84,7 @@ function Page (){
 
   useEffect(()=>{
      handleSites();
+     setSitesLoadingState()
     console.log(sites);
   },[]
     );
@@ -94,7 +95,7 @@ function Page (){
      );
 
 
-const chunkedSites = sliceIntoChunks(companies,3);
+const chunkedSites = sliceIntoChunks(sites,3);
 const [currentSites,setCurrentSites]=useState(sites)
 const [sitesLoadingState,setSitesLoadingState]=useState(sitesLoading)
 const [page, setPage] = useState(1);
@@ -150,16 +151,8 @@ const style = {
                 direction="row"
                 spacing={1}
               >
-                <Button
-                  color="inherit"
-                  startIcon={(
-                    <SvgIcon fontSize="small">
-                      <ArrowUpOnSquareIcon />
-                    </SvgIcon>
-                  )}
-                >
-                  Import
-                </Button>
+                <CSVReader />
+
                 <Button
                   color="inherit"
                   startIcon={(
@@ -170,7 +163,6 @@ const style = {
                 >
                   Export
                 </Button>
-                <CSVReader/>
               </Stack>
             </Stack>
             <div>
@@ -187,8 +179,9 @@ const style = {
               </Button>
             </div>
           </Stack>
-          <CompaniesSearch />
-          <Grid
+          <CompaniesSearch />       
+
+          {sitesLoading ?  <CircularProgress /> : (<Grid
             container
             spacing={3}
           >
@@ -202,7 +195,7 @@ const style = {
                 <CompanyCard company={company} />
               </Grid>
             ))}
-          </Grid>
+          </Grid>)}
           <Box
             sx={{
               display: 'flex',

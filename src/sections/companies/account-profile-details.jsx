@@ -19,6 +19,8 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete'
 import { TransitionGroup } from 'react-transition-group';
 import wilaya from "./wilaya.json";
+import { useDispatch, useSelector  } from "react-redux";
+import { sitesCreationTech, selectCreatedSite, selectCreatedSiteLoad } from '@/features/site/siteCreationSlice.js';
 const states = [
   {
     value: 'CENTER',
@@ -67,6 +69,14 @@ function renderItem({ item, handleRemoveTech }) {
   );
 }
 export const AccountProfileDetails = () => {
+    const dispatch = useDispatch();
+
+  const sitetemplate={
+  site_id: '112',
+  wilaya: "Jijel",
+  UOP:"EAST",
+  sitetech:"2G"
+}
   const [values, setValues] = useState({});
   const [checked, setChecked] = useState(false);
 const templatevalue={
@@ -77,20 +87,7 @@ const templatevalue={
   state: 'los-angeles',
   country: 'USA'
 }
-const sitetemplate={
-  site_id: '112',
-  wilaya: "jijel",
-  UOP:"EAST",
-  Technologies:[{
-    type: '2G',
-    state: 'ACTIVE'
-  },
-  {
-    type:'3G',
-    state: 'ACTIVE'
-  }
-  ]
-}
+
 
 
 const [techsInBasket, setTechsInBasket] = useState([]);
@@ -123,11 +120,20 @@ const handleChange = useCallback(
         ...prevState,
         [event.target.name]: event.target.value
       }));
+      console.log(event.target.name+" "+event.target.value);
       console.log(values)
-    },
-    [values]
+    }
   );
-
+const handleWilayaChange = useCallback(
+    (event) => {
+      setValues((prevState) => ({
+        ...prevState,
+        ["wilaya"]: event.target.value
+      }));
+      console.log(event.target.name+" "+event.target.getOptionLabel);
+      console.log(values)
+    }
+  );
   const icon = (
     <Paper sx={{ m: 1 }} elevation={4}>
       <Box component="svg" sx={{ width: 100, height: 100 }}>
@@ -147,27 +153,28 @@ const handleChange = useCallback(
   
   const handleSubmit = useCallback(
     (event) => {
-/*      dispatch(createSite({ values }))
+      
+      const te=techsInBasket.map(function(i){return { "type": i, "state":"ACTIVE"}})
+      const st=JSON.stringify(Object.entries({site_id: values.site_id,wilaya: values.wilaya,UOP: values.UOP, managedObject: te}))
+      values.managedObject=te
+      localStorage.setItem("userData", values);
+      event.preventDefault();
+      dispatch(sitesCreationTech(values))
       .unwrap()
       .then(() => {
-  
-      
+        setChecked((prev) => !prev);
+        console.log("finally made it !"+selectCreatedSite)
     })
       .catch(() => {
+        console.log("ow maaaaan !")
         //setLoading(false);
-      });*/
-      localStorage.setItem("userData", JSON.stringify(values));
-      setChecked((prev) => !prev);
-      console.log("heheh"+values.wilaya)
-
-      event.preventDefault();
-    },
-    []
+      });
+    }
   );
-  const ref0 = useRef();
+
   return (
     <form
-      autoComplete
+      autoComplete="off"
       noValidate
       onSubmit={handleSubmit}
     >
@@ -192,11 +199,11 @@ const handleChange = useCallback(
                   fullWidth
                   helperText="Please specify the site's identifying code"
                   label="Identifier"
-                  name="siteCode"
+                  name="site_id"
                   onChange={handleChange}
                   required
 
-                  value={values.firstName}
+                  value={values.site_id}
                 />
               </Grid>
               <Grid
@@ -208,16 +215,14 @@ const handleChange = useCallback(
                 id="combo-box-demo"
                 options={wila}
                 sx={{ width: 300 }}
-                name="wilaya" value={values.wilaya}
-                onInputChange={(e, v, r) => {
-                  const ev = e.target;
-                  if (r === "reset") console.log(ev, v, r);
-                }}
-                onChange={(e, v, r) => {
-                  console.log(ref0.current.getAttribute("name"));
-                }}
-          
-                renderInput={(params) => <TextField {...params}  name="wilaya" value={values.wilaya} label="Wilaya" />}
+                name="wilaya" 
+                inputValue={values.wilaya}
+                onInputChange={(event, newInputValue)=>{      setValues((prevState) => ({
+                  ...prevState,
+                  ["wilaya"]: newInputValue
+                }));
+          }}
+                renderInput={(params) => <TextField {...params}  label="Wilaya" />}
               />
               </Grid>
              
@@ -234,7 +239,7 @@ const handleChange = useCallback(
                   required
                   select
                   SelectProps={{ native: true }}
-                  value={values.state}
+                  value={values.UOP}
                 >
                   {states.map((option) => (
                     <option
