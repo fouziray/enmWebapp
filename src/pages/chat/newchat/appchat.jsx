@@ -29,7 +29,7 @@ const GlobalStyle = createGlobalStyle`
 const Background = styled.div`
 position: absolute;
 height: 100vh;
-width: 100vw;
+width: fit-content;
 overflow: hidden;
 z-index: -1;
 

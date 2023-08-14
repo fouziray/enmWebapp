@@ -51,21 +51,21 @@ const Input = styled.input.attrs(props => ({
 const Login = () => {
     const inputRef = useRef(null);
     const { setUserName } = useChat();
+    localStorage.getItem('username') ? setUserName(localStorage.getItem('username')): null ;
 
     function handleSubmit(e) {
         e.preventDefault();
-        
         setUserName(inputRef.current.value);
     }
 
-    return (
+    return ( !localStorage.getItem('username') ? 
         <LoginContainer onSubmit={ handleSubmit }>
             <Input type="text" placeholder="Enter a username" ref={ inputRef } />
             
             <button>
                 <AiOutlineArrowRight color='#fff' size="1.2em" />
             </button>
-        </LoginContainer>
+        </LoginContainer> : <></>
     );
 };
 

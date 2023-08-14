@@ -22,27 +22,26 @@ import {
 } from '@mui/material';
 
 import * as React from 'react';
-export const OverviewLatestProducts = (props) => {
+export const OverviewLatestGroups = (props) => {
 
   const { products = [],sx } = props;
 
-  const {saveSelectedPosition= null}= props;
-  console.log("hawlik products f groups ", saveSelectedPosition);
+  const {onSelectedTeam= null}= props;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
-  const [placement, setPlacement] = React.useState();
+  const [placement, setPlacement] = React.useState(props.currentSelectedTeam);
   const [groupusersPopper, setGroupusersPopper] = React.useState();
   const [detailedGroupName, setDetailedGroupName] = React.useState();
 
   const refListGroups = React.useRef();
-  const showSideDetailedMembers= (newPlacement,users,groupname) => (e)=> {
+  const showSideDetailedMembers = (newPlacement,users,groupname) => (e)=> {
     console.log("hihiihi");
     setAnchorEl(e.currentTarget);
     //setAnchorEl(refListGroups);
     setOpen((prev) =>  placement !== newPlacement || !prev);
     setPlacement(newPlacement);
-    saveSelectedPosition(placement);
+    onSelectedTeam(newPlacement);
     setDetailedGroupName(groupname);
     setGroupusersPopper(users);
 
@@ -84,7 +83,7 @@ export const OverviewLatestProducts = (props) => {
               key={product.id}
               onClick={showSideDetailedMembers(product.id,product.users,product.name)}
               selected={placement === product.id}
-              disablePadding
+        
             >
               <Grid container justifyContent="left" spacing={5}>
               <Grid item xs={12} md={3}>
@@ -176,7 +175,7 @@ export const OverviewLatestProducts = (props) => {
   );
 };
 
-OverviewLatestProducts.propTypes = {
+OverviewLatestGroups.propTypes = {
   products: PropTypes.array,
   sx: PropTypes.object
 };

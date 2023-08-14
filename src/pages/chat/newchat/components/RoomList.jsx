@@ -1,10 +1,14 @@
-import React, { useMemo } from 'react';
+import React, { useMemo,useEffect } from 'react';
+
 import styled from 'styled-components';
 import { useChat } from '../context/ChatProvider';
 import useChatActions from '../hooks/useChatActions';
 import useDebounce from '../hooks/useDebounce';
 import { Description } from '../styled/Description';
-
+import { filteredSession, selectFilteredSession, selectFilteredSessionLoad } from '@/features/driveTest/filterSessionSlice.js';
+import { useDispatch, useSelector  } from "react-redux";
+ import {selectUser } from '@/features/auth';
+ import userService from '@/services/user.service';
 const RoomListContainer = styled.div`
     --space: 1em;
     --horizontal-space: 2vw;
@@ -125,13 +129,41 @@ const rooms = [
 ];
 
 const RoomList = ({ query, isNavOpen, setIsNavOpen }) => {
+    const user= useSelector(selectUser);
+    console.log("hehehe", user);
+  const dispatch = useDispatch();
+
+  const filteredsessions= useSelector(selectFilteredSession);
+
+  const filteredsessionsLoading= useSelector(selectFilteredSessionLoad);
+useEffect(()=>{
+  userService.getuserGroupNumber(user.id).then(value=>{
+          dispatch(filteredSession({group_id: value.data[0].groups__id, technician_id: null})).then((response) =>console.log("this is responding",response));
+  
+    });
+},[]);  
+const [roomsDt,setRoomsDt]=React.useState([]);
+    useEffect(()=>{
+        if (filteredsessions){
+            let _=[]
+        _=JSON.parse(JSON.stringify(filteredsessions))
+        _.map((room)=>{
+            room.name=room.technicien.username;
+            room.description=room.dtTeam.name +', start at '+room.startDate;
+            room.src= 'https://assets.website-files.com/581c85345d7e0501760aa7db/5b17ab5cc6215ef0331908fd_Creative%20Ways%20to%20Build%20Community%20at%20Your%20Gym.jpg';
+            room.src= 'http://localhost:8000'+room.avatar.avatar;
+        })
+        setRoomsDt(_);
+        console.log("state",_);
+    };
+    },[filteredsessionsLoading])
     const debouncedSearch = useDebounce(query, 350);
     const { joinRoom } = useChatActions();
     const { currentRoom, setCurrentRoom, userName } = useChat();
 
 
     const filteredRooms = useMemo(() => {
-        const filter = rooms.filter(room => {
+        const filter = roomsDt.filter(room => {
             const includesCaseInsensitive  = {
                 name: room.name.toLowerCase(),
                 description: room.description.toLowerCase()
@@ -150,7 +182,7 @@ const RoomList = ({ query, isNavOpen, setIsNavOpen }) => {
             return;
         }
 
-        const selectedRoom = rooms.find(room => room.id === roomID);
+        const selectedRoom = roomsDt.find(room => room.id === roomID);
         setCurrentRoom(selectedRoom);
 
         joinRoom({ roomID, userName });
@@ -165,7 +197,20 @@ const RoomList = ({ query, isNavOpen, setIsNavOpen }) => {
 
             <ul>
                 {   
-                    
+                    roomsDt.map(room=>{
+                        const { id, name, src, description} = room;
+                        return (
+                        <RoomItem active={ currentRoom?.id === id } key={ id } onClick={ () => handleRoomClick(id) }>
+                            <img alt='room-img' src={ src } />
+
+                            <div>
+                                <span>{ name }</span>
+                                <Description color='rgba(254,254,254,0.5)' size='0.7em'>{ description }</Description>
+                            </div>
+                        </RoomItem>
+                    );})}
+                    {
+
                     filteredRooms.map(room => {
                         const { id, name, src, description} = room;
 

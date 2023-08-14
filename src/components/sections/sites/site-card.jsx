@@ -1,11 +1,27 @@
 import PropTypes from 'prop-types';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
 import ClockIcon from '@heroicons/react/24/solid/ClockIcon';
-import { Avatar, Box, Card, CardContent, Divider, Stack, SvgIcon, Typography } from '@mui/material';
+import { Avatar, Box,Chip ,  Card, CardContent, Divider, Stack, SvgIcon, Typography } from '@mui/material';
+import NorthIcon from '@mui/icons-material/North';
+import EastIcon from '@mui/icons-material/East';
+import SouthIcon from '@mui/icons-material/South';
+import { formatDistanceToNow } from 'date-fns';
 
-export const CompanyCard = (props) => {
-  const { company } = props;
 
+export const SiteCard = (props) => {
+  const { company, lastsessions } = props;
+ 
+const  searchsite= () =>{
+  if(lastsessions){
+    for (var i=0;i<lastsessions.length;i++){
+      console.log("hehehehe");
+      if(lastsessions[i]['site']=== company.site_id)
+        return lastsessions[i]
+    }
+  }
+  return null;
+}  
+  
   return (
     <Card
       sx={{
@@ -22,10 +38,11 @@ export const CompanyCard = (props) => {
             pb: 3
           }}
         >
-          <Avatar
-            src={company.logo}
-            variant="square"
-          />
+        
+          {(company.UOP?.toUpperCase()==='CENTRE' | company.UOP?.toUpperCase()== 'CENTER' ) ? <NorthIcon/> : null}
+          {(company.UOP?.toUpperCase()==='SOUTH' ) ? <SouthIcon/> : null}
+          {(company.UOP?.toUpperCase()==='EAST' ) ? <EastIcon/> : null}
+
         </Box>
         <Typography
           align="center"
@@ -38,13 +55,17 @@ export const CompanyCard = (props) => {
           align="center"
           variant="body1"
         >
-          {company.wilaya + ' ' + company.UOP +'  technologies:'}
-          { company.managedObject ? 'technologies: '+ company.managedObject.map((technology) => (
+          {company.wilaya  }</Typography>
+          <Stack   alignItems="center" direction="row" spacing={1}>
+
+          { company.managedObject ?  company.managedObject.map((technology) => (
+                     
+                  <><Chip label={technology.type} variant="outlined" /></>
+           
               
-                technology.type
               
-            )): ''}
-        </Typography>
+            )): ''}     </Stack> 
+        
       </CardContent>
       <Box sx={{ flexGrow: 1 }} />
       <Divider />
@@ -71,33 +92,15 @@ export const CompanyCard = (props) => {
             display="inline"
             variant="body2"
           >
-            Updated 2hr ago
+            { searchsite() ? formatDistanceToNow(new Date(searchsite().max)) : 'not tested yet' }
           </Typography>
         </Stack>
-        <Stack
-          alignItems="center"
-          direction="row"
-          spacing={1}
-        >
-          <SvgIcon
-            color="action"
-            fontSize="small"
-          >
-            <ArrowDownOnSquareIcon />
-          </SvgIcon>
-          <Typography
-            color="text.secondary"
-            display="inline"
-            variant="body2"
-          >
-            {company.downloads} Downloads
-          </Typography>
-        </Stack>
+        
       </Stack>
     </Card>
   );
 };
 
-CompanyCard.propTypes = {
+SiteCard.propTypes = {
   company: PropTypes.object.isRequired
 };

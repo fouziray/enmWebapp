@@ -58,7 +58,7 @@ function Register() {
   }, []);
 
   return (
-    <AuthOutlet>
+    <AuthOutlet header={"FASTTEST"}>
       <Stack direction="row" gap={3} sx={{ alignItems: 'center' }}>
         <TextField
           inputRef={ad}
@@ -98,6 +98,14 @@ function Register() {
         variant="outlined"
       />
 
+<Button variant="contained" component="label"
+>
+        Import Photo
+        <input
+    type="file"
+    hidden
+  />
+      </Button>
       <Button variant="contained" onClick={registerHandler}>
         Sign Up
       </Button>

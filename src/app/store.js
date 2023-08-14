@@ -10,7 +10,8 @@ import sitecreationReducer from '@/features/site/siteCreationSlice';
 import usersgroupsReducer from '@/features/driveTest/usersPerGroupsSlice';
 import dtsessionsReducer from '@/features/driveTest/dtSessionSlice';
 import technicianusersReducer from '@/features/driveTest/technicianUsersSlice';
-
+import filteredSessionsReducer from '@/features/driveTest/filterSessionSlice';
+import hasdtsessionReducer from '@/features/driveTest/hasDtSessionSlice';
 const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
@@ -24,6 +25,8 @@ const store = configureStore({
     usersgroups: usersgroupsReducer,
     dtsession: dtsessionsReducer,
     technicians:technicianusersReducer,
+    filteredsession: filteredSessionsReducer,
+    hasdtsession: hasdtsessionReducer
   },
   middleware: (getdefaultMiddleware) =>
     getdefaultMiddleware().concat(apiSlice.middleware),

@@ -4,7 +4,7 @@ import ArrowRightIcon from '@heroicons/react/24/solid/ArrowRightIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/solid/EllipsisVerticalIcon';
 import {
   Box,
-  Button,
+  Button,Grid,
   Card,
   CardActions,
   CardHeader,
@@ -21,13 +21,20 @@ import * as React from 'react';
 
 export const OverviewTechnicians = (props) => {
   const { products = [], sx } = props;
-  const [placement, setPlacement] = React.useState();
-
+  const [placement, setPlacement] = React.useState(props.currentSelectedTechnician);
+  const { onTechnicianSelected = null}= props;
   const handleSelection = (newPlacement) => (e)=> {
     setPlacement(newPlacement);
+    onTechnicianSelected(newPlacement);
+
   }
-  console.log("product haw wech fih",products);
     return (
+      <Grid container  spacing={2}   justifyContent="center">
+   <Grid item
+            xs={12}
+            md={6}
+            lg={6}
+          >
     <Card sx={sx}>
       <CardHeader title="Choose technician" />
       <List>
@@ -43,25 +50,28 @@ export const OverviewTechnicians = (props) => {
               selected={placement===product.id}
               
             >
+              <Grid container justifyContent="left" spacing={5}>
+              <Grid item xs={12}  md={2}
+            lg={2} >
+
               { product.profile__avatar ? <Avatar alt="44" src={"http://localhost:8000/static/"+product.profile__avatar} /> : <></>}
-            
-              <ListItemText justifyContent='center'
+              </Grid><Grid item xs={12}  md={6}
+            lg={6}>
+
+              <ListItemText 
                 primary={product.first_name + " " + product.last_name}
                 primaryTypographyProps={{ variant: 'subtitle1' }}
                 secondary={`Updated ${ago} ago`}
                 secondaryTypographyProps={{ variant: 'body2' }}
               />
-              <IconButton edge="end">
-                <SvgIcon>
-                  <EllipsisVerticalIcon />
-                </SvgIcon>
-              </IconButton>
+            </Grid></Grid>
             </ListItemButton>
           );
         })}
       </List>
       <Divider />
     </Card>
+    </Grid></Grid>
   );
 };
 

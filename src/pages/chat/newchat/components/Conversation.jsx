@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import { getFirstLetter } from '../helpers';
 import useMessages from '../hooks/useMessages';
 import { useChat } from '../context/ChatProvider';
+import {conversationDetail, selectConversation, selectConversationLoading } from '@/features/conversation/conversationSlice';
+import { useDispatch, useSelector  } from "react-redux";
+import {  CircularProgress } from '@mui/material';
+
 
 const ConversationContainer = styled.div`
     display: flex;
@@ -64,7 +68,19 @@ const BotMessage = styled.div`
     background: rgba(0,0,0,0.05);
 `;
 
+
+
 const Conversation = () => {
+    const dispatch = useDispatch();
+
+useEffect(()=>{
+      dispatch(conversationDetail('f219e53f30c04aec874d2968c788a125'));
+    console.log("redispatched 942fb11b3990426ca0145a10ec458684");
+    },[]);
+  const conversation = useSelector(selectConversation);
+
+  const isConversationLoading= useSelector(selectConversationLoading);
+
     const { socket } = useChat();
     const messages = useMessages();
     const chatConversation = useRef(null);
@@ -73,14 +89,24 @@ const Conversation = () => {
     useEffect(() => {
         chatConversation.current.scrollTo(0, chatConversation.current.scrollHeight);    
     }, [messages]);
-
+//event.action_name ? event.action_name : event.intent_name ? event.intent_name : 'hi'
     return (
         <ConversationContainer ref={ chatConversation }>
+            {conversation.map((event,index)=>(<> {event.action_name ?<BotMessage> { event.data.action_text ? event.data.action_text : event.action_name  } </BotMessage>: 
+            <MessageContainer key={ index } incomingMessage={ true }>
+            <UserProfile content={ 'author' } />
+            <MessageContent>{ event.data.text }</MessageContent>
+            </MessageContainer> }
+            </>
+            ))}
+
+            { isConversationLoading && <CircularProgress /> }
+
             {
                 messages.map((m) => {
                     const { text, author, socket_id, id } = m;
 
-                    const isBot = (author === 'BOT' && ! socket_id);
+                    const isBot = (author === 'BOT');
                     
                     return isBot ?
                         <BotMessage> { text } </BotMessage>

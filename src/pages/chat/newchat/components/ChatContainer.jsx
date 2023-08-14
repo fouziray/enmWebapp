@@ -14,7 +14,7 @@ const ChatAppContainer = styled.div`
     display: flex;
     gap: 2vw;
     height: 100vh;
-    width: 100vw;
+    width: 100%;
     justify-content: space-between;
     background: #e5e7e8;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,

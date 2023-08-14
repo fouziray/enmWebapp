@@ -1,19 +1,24 @@
 import axios from 'axios';
 const API_URL = 'http://localhost:8000/';
 const config = {
-  headers: { Authorization: `Token ad76a4c1c0ce826e319eb392a1849f3b0ccf2a5b` }
+  headers: { Authorization: localStorage.getItem("token") ? 'Token '+JSON.parse(localStorage.getItem("token")).token : '' }
 };
-const sites = async () => {
+const sites = async (_) => {
   const response = await axios
-    .get(API_URL + 'sites/',config);
+    .get(_ ? _ : API_URL + 'sites/',config);
    /* .then((res) => { //this resolves the request here and no further in the slice
       console.log(res.data) 
     })
     .catch(err => {
       console.log(err.response.data)
     })*/
+    console.log("s    jfjf",_);
   return response.data;
 };
+const get_sites_last_session= async () =>{
+  const response= await axios.get(API_URL+'sites/lastsession/',config);
+  return response.data;
+}
 
 const create_site = async (values) => {
   console.log("hello i'm creating site"+ values)
@@ -30,6 +35,7 @@ const create_site = async (values) => {
 const siteService = {
   sites,
   create_site,
+  get_sites_last_session,
 };
 
 //export  { messages };

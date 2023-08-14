@@ -1,6 +1,16 @@
 import React from 'react';
 import { Stack, useTheme, Typography } from '@mui/material';
 import { FormSX } from './Auth.styles';
+import { createTheme } from '@mui/material/styles';
+import CellTowerIcon from '@mui/icons-material/CellTower';
+
+const themess = createTheme({
+  palette: {
+    logocolor: {
+      light: '#00285E',
+    },
+  },
+});
 
 function AuthOutlet({ children, header }) {
   const theme = useTheme();
@@ -13,10 +23,10 @@ function AuthOutlet({ children, header }) {
           border: `1px solid ${theme.palette.grey.border}`,
           background: theme.palette.grey[50],
         }}
-      >
+      ><CellTowerIcon color={themess.palette.logocolor.light} />
         {header ? (
-          <Typography textAlign="center" variant="h2">
-            {header}
+          <Typography color={themess.palette.logocolor.light} textAlign="center" variant="h2">
+            {header} 
           </Typography>
         ) : (
           <img

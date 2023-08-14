@@ -6,31 +6,15 @@ import TemplateTester from '@/components/TemplateTester/TemplateTester';
 import { subDays, subHours } from 'date-fns';
 import { Box, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from '@/layouts/dashboard/layout';
-import { OverviewBudget } from '@/sections/overview/overview-budget';
-import { OverviewLatestOrders } from '@/sections/overview/overview-latest-orders';
-import { OverviewLatestProducts } from '@/sections/overview/overview-latest-products';
-import { OverviewSales } from '@/sections/overview/overview-sales';
-import { OverviewTasksProgress } from '@/sections/overview/overview-tasks-progress';
-import { OverviewTotalCustomers } from '@/sections/overview/overview-total-customers';
-import { OverviewTotalProfit } from '@/sections/overview/overview-total-profit';
-import { OverviewTraffic } from '@/sections/overview/overview-traffic';
+import { OverviewBudget } from '@/components/sections/overview/overview-budget';
+import { OverviewLatestOrders } from '@/components/sections/overview/overview-latest-orders';
+import { OverviewLatestProducts } from '@/components/sections/overview/overview-latest-products';
+import { OverviewSales } from '@/components/sections/overview/overview-sales';
+import { OverviewTasksProgress } from '@/components/sections/overview/overview-tasks-progress';
+import { OverviewTotalCustomers } from '@/components/sections/overview/overview-total-customers';
+import { OverviewTotalProfit } from '@/components/sections/overview/overview-total-profit';
+import { OverviewTraffic } from '@/components/sections/overview/overview-traffic';
 
-function Home() {
-  return (
-    <Container  sx={{ py: 2, position: 'relative' }}>
-      <Stack gap={1} my={2}>
-        <Typography textAlign="center" variant="h2">
-          Viterjs-template
-        </Typography>
-        <Typography textAlign="center" variant="subtitle1">
-          React + Redux + MuI + Axios + ESlint + Prettier
-        </Typography>
-      </Stack>
-      <TemplateTester />
-      <Counter />
-    </Container>
-  );
-}
 const now = new Date();
 
 function Page() {

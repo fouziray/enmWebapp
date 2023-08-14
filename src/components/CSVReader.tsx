@@ -14,6 +14,15 @@ const CSVReader = () => {
   var viewData = { 
     sites : [] 
 };
+    rows?.map((rowData, i) => {
+    var jsonData = {};
+    rowData?.map((data, i) => {
+      jsonData[headers[i]]=data;
+      console.log(jsonData);
+    })
+    ta.push(jsonData);
+  })
+    console.log(ta);
   return (
     <div>
       <CSVSelector onChange={(_data) => setData(_data)} />

@@ -9,18 +9,17 @@ import ChatMessage  from '@/pages/chat/chatPage';
 import ChatApp from '@/pages/chat/newchat/appchat';
 import Sites from '@/pages/sites/sites';
 import Dtest from '@/pages/DtSession/dtsession';
+import SideBar from  '@/components/sidebar/sideBar.jsx';
+
 function Routing() {
   return (
     <Routes>
-      <Route path="*" element={<Home />} />
+      <Route path="*" element={<><SideBar/><Home /></>} />
       <Route path="/login/*" element={<Login />} />
       <Route path="/register/*" element={<Register />} />
-      <Route path="/messages/" element={<MessageContent />} />
-      <Route path="messages/:id" element={<ConversationContent />} />
-      <Route path="/chat/" element={<ChatMessage/>} />
-      <Route path="/newchat" element={<ChatApp />} /> 
-      <Route path="/sites" element={<Sites/>}/>
-      <Route path="/drivetest" element={<Dtest/>} />
+      <Route path="/chat/" element={<><SideBar/><ChatApp/></>} />
+      <Route path="/sites" element={<><SideBar/><Sites/></>}/>
+      <Route path="/drivetest" element={<><SideBar/><Dtest/></>} />
 
     </Routes>
   );

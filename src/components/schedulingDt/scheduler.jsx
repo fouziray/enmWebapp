@@ -7,6 +7,7 @@ import {
   AppointmentForm,
   AppointmentTooltip,
   WeekView,
+  Resources,
   EditRecurrenceMenu,
   AllDayPanel,
   ConfirmationDialog,
@@ -14,16 +15,79 @@ import {
   DateNavigator,
   TodayButton,
 } from '@devexpress/dx-react-scheduler-material-ui';
-
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 const currentDate = '2018-11-01';
-const enddate= new Date(2023, 7, 1, 11, 35) ;
-const startdate= new Date(2023, 7, 1, 9, 35)
+const enddate= new Date(2023, 7, 2, 11, 35) ;
+const startdate= new Date(2023, 7, 2, 9, 35)
 const schedulerData = [
   { id:1,startDate:startdate, endDate: enddate, title: 'Meeting'},
-  { id: 2, startDate:new Date(2023, 7, 1, 14, 35), endDate: new Date(2023, 7, 1, 15, 35), title: 'Go to a gym'},
+  { id: 2, startDate:new Date(2023, 7, 2, 14, 35), endDate: new Date(2023, 7, 2, 15, 35), title: 'Go to a gym'},
+];
+import {
+  pink, purple, teal, amber, deepOrange,
+} from '@mui/material/colors';
+const resourcesData = [
+  {
+    text: 'Room 101',
+    id: 1,
+    color: amber,
+  }, {
+    text: 'Room 102',
+    id: 2,
+    color: pink,
+  }, {
+    text: 'Room 103',
+    id: 3,
+    color: purple,
+  }, {
+    text: 'Meeting room',
+    id: 4,
+    color: deepOrange,
+  }, {
+    text: 'Conference hall',
+    id: 5,
+    color: teal,
+  },
 ];
 
+const TextEditor = (props) => {
+  // eslint-disable-next-line react/destructuring-assignment
+  if (props.type === 'multilineTextEditor' || props.type === 'titleTextEditor') {
+    return null;
+  } return <AppointmentForm.TextEditor {...props} />;
+};
+const ResourceEditor=(props) => {
+  return <AppointmentForm.ResourceEditor {...props} />;
+}
+const Label=(props)=>{
+  console.log("type of props", props.text);
+  let propscopy=JSON.parse(JSON.stringify(props));
+  if (propscopy.text === 'Details') {
+    propscopy.text='Choose a date'
+  } 
+  else{
+    if(propscopy.text === 'More Information')
+    propscopy.text='Site Information';
+  }
+  return <AppointmentForm.Label {...propscopy} />;
 
+}
+const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }) => {
+  const onCustomFieldChange = (nextValue) => {
+    onFieldChange({ customField: nextValue });
+  };
+  console.log("alhubiw a mezwarou",restProps,appointmentData);
+  return (
+    <AppointmentForm.BasicLayout
+      appointmentData={appointmentData}
+      onFieldChange={onFieldChange}
+      {...restProps}
+    >
+      
+    </AppointmentForm.BasicLayout>
+  );
+};
 /*export default () => (
   <Paper>
     <Scheduler
@@ -40,31 +104,92 @@ const schedulerData = [
     </Scheduler>
   </Paper>
 );*/
+
+
 export default class Demo extends React.PureComponent {
     constructor(props) {
-      super(props);
-      console.log("jejeej", schedulerData.concat(props.data));
+      super(props);   
+     const copyDeepObject = obj => {
+        return JSON.parse(JSON.stringify(obj));
+     }
+     let copy = copyDeepObject(props.data); 
+
+
+     copy.map(function(item){
+        if(!(item.startDate instanceof Date)) {
+         item.startDate=new Date(item.startDate); 
+         item.endDate=new Date(item.endDate);
+        }
+        return item;
+      });
+      let sites_array= copyDeepObject(props.sites);
+      sites_array.forEach(obj=>{obj.text=obj.site_id; obj.id=obj.site_id});
       this.state = {
-        data: schedulerData.concat(props.data),
+        ///data: schedulerData.concat(copy),
+        data: copy,
+        addedData:[],
+        sites: props.sites,
         currentDate: props.now,
-  
+        hasdtsession: props.hasdtsession,
         addedAppointment: {},
         appointmentChanges: {},
         editingAppointment: undefined,
+        resources: [
+        {
+          fieldName: 'siteId',
+          title: 'Site identifying code',
+          instances: sites_array,
+        }],
       };
+      console.log("jejeej", this.state.data);
+
       this.onSchedulerStateChange=props.onSchedulerStateChange;
+      this.currentSelectedTechnician=props.currentSelectedTechnician;
+      this.currentSelectedTeam=props.currentSelectedTeam;
+      this.hasSession=props.onHasSession;
+      this.hasdtsession=props.hasdtsession
       this.commitChanges = this.commitChanges.bind(this);
       this.changeAddedAppointment = this.changeAddedAppointment.bind(this);
       this.changeAppointmentChanges = this.changeAppointmentChanges.bind(this);
       this.changeEditingAppointment = this.changeEditingAppointment.bind(this);
+      this.doesOverlap = this.doesOverlap.bind(this);
+//      this.onAppointmentFormOpening = this.onAppointmentFormOpening.bind(this);
+
     }
- 
+    static getDerivedStateFromProps(nextProps) {
+      console.log("nextProps", nextProps, nextProps.hasdtsession);
+      return{ hasdtsession: nextProps.hasdtsession };  
+    }
+    doesOverlap(e1, e2){
+      var e1start = e1.startDate.getTime();
+      var e1end = e1.endDate.getTime();
+      var e2start = e2.startDate.getTime();
+      var e2end = e2.endDate.getTime();
+    console.log("function does overlap", e1start, e1end, e2start, e2end);
+      return (e1start >= e2start && e1start < e2end || 
+          e2start >= e1start && e2start < e1end)
+    }
+    componentDidUpdate(prevProps) {
+      // Typical usage (don't forget to compare props):
+      console.log("changed manaaaaannn");
+
+      if (this.props.hasdtsession !== prevProps.hasdtsession) {
+        console.log("changed manaaaaannn",this.props.hasdtsession);
+      }
+    }
     changeAddedAppointment(addedAppointment) {
       this.setState({ addedAppointment });
+      var a=this.hasSession(addedAppointment.siteId);
+      console.log("session 2 2 2 2",  a,  addedAppointment);
+
+
     }
-  
+    
+    
     changeAppointmentChanges(appointmentChanges) {
       this.setState({ appointmentChanges });
+      console.log("has changed",appointmentChanges);
+
     }
   
     changeEditingAppointment(editingAppointment) {
@@ -72,33 +197,60 @@ export default class Demo extends React.PureComponent {
     }
   
     commitChanges({ added, changed, deleted }) {
+      
       this.setState((state) => {
           console.log(deleted,"del");
         let { data } = state;
+        let {addedData} = state;
         if (added) {
           const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
-          console.log("creation",startingAddedId, data.length,)
-          data = [...data, { id: startingAddedId, ...added }];
-          this.onSchedulerStateChange(data);
-
+          console.log("creation",startingAddedId, added,);
+          let overlaps=false;
+          this.doesOverlap
+          for( var i = 0; i< data.length; i++ ) {
+            overlaps=this.doesOverlap(data[i],added);
+            console.log("overlappingg in prediacte",overlaps);
+            if( overlaps ){
+              break;
+            }
+          }
+          console.log(overlaps ? "overlaps" : "doesn't overlap");
+//          var a=this.hasSession(added.title);
+//        console.log("session 2 2 2 2",  a,  this.hasdtsession);
+//          if( a ) { console.log("session 2 3",  a,  this.hasdtsession);}
+          if(this.props.hasdtsession ){
+            console.log("has a dt sesion ------------")
+          }else{
+            console.log("doesn't have a dt session ------");
+            if(!overlaps && added.siteId) 
+            {
+              added.title=added.siteId;
+              data = [...data, { id: startingAddedId, ...added }];
+              addedData =[...addedData ,{ id: startingAddedId, technicien: this.currentSelectedTechnician, dtTeam: this.currentSelectedTeam ,...added }] 
+            }
+          }
+          //don't forget conflict of time
+          
+          this.onSchedulerStateChange({data,addedData});
         }
         if (changed) {
           data = data.map(appointment => (
-            changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment));
+          changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment));
+          
         }
         if (deleted !== undefined) {
           data = data.filter(appointment => appointment.id !== deleted);
           console.log("deleted",data,deleted);
         }
-        return { data };
+        return { data, addedData };
       });
     }
-  
+    
     render() {
       const {
-        currentDate, data, addedAppointment, appointmentChanges, editingAppointment,
+        currentDate, data, resources,addedAppointment, appointmentChanges, editingAppointment, sites
       } = this.state;
-  
+      console.log("adedededed",sites);
       return (
         <Paper>
           <Scheduler
@@ -121,7 +273,7 @@ export default class Demo extends React.PureComponent {
             />
             <WeekView
               startDayHour={9}
-              endDayHour={17}
+              endDayHour={24}
             />
             <Toolbar />
             <DateNavigator />
@@ -137,10 +289,22 @@ export default class Demo extends React.PureComponent {
               showOpenButton
               showDeleteButton
             />
-            <AppointmentForm />
+            <AppointmentForm
+              
+              basicLayoutComponent={BasicLayout}
+              textEditorComponent={TextEditor}
+              labelComponent={Label}
+              resourceEditorComponent={ResourceEditor}
+            />
+            <Resources
+            data={resources}
+            mainResourceName="siteId"
+          />
+
           </Scheduler>
         </Paper>
       );
     }
+    
   }
   

@@ -13,11 +13,11 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Navigate, useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
 import AuthOutlet from './AuthOutlet';
-import { login } from "@/features/auth";
+import { login, selectIsLoggedIn, selectUser } from "@/features/auth";
 import { useDispatch, useSelector } from "react-redux";
 
 function Login() {
-  
+  const userinfo=useSelector(selectUser);
   const { isLoggedIn } = useSelector((state) => state.auth);
   const email = useRef(null);
   const password = useRef(null);
@@ -33,9 +33,9 @@ function Login() {
   const [loggedUi,setLoggedUi]=useState(false);
 
   useEffect(()=>{
-    if(loggedUi)
+    if(isLoggedIn )
       handleLogin();
-  },[loggedUi]);
+  },[isLoggedIn]);
 
   const loginHandler = async (e) => {
       e.preventDefault();
@@ -62,13 +62,16 @@ function Login() {
     dispatch(login({ username, password }))
       .unwrap()
       .then(() => {
-  
-        if(isLoggedIn)
+        setLoggedUi(true);
+        console.log("heiehe",);
+        localStorage.setItem("user", JSON.stringify(userinfo))
+/*        if(isLoggedIn)
           handleLogin("/profile");
-          setLoggedUi(True);
+          setLoggedUi(True);*/
       
     })
       .catch(() => {
+        email.current.focus();
         //setLoading(false);
       });
 
@@ -81,7 +84,7 @@ function Login() {
   }, []);
 
   return (
-    <AuthOutlet header={undefined}>
+    <AuthOutlet header={"FASTTEST"}>
       <TextField
         inputRef={email}
         type="text"

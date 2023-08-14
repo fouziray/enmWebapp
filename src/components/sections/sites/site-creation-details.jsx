@@ -16,6 +16,7 @@ import {
 
   Unstable_Grid2 as Grid
 } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete'
 import { TransitionGroup } from 'react-transition-group';
 import wilaya from "./wilaya.json";
@@ -68,7 +69,7 @@ function renderItem({ item, handleRemoveTech }) {
     </ListItem>
   );
 }
-export const AccountProfileDetails = () => {
+export const SiteCreationDetailsPopper = () => {
     const dispatch = useDispatch();
 
   const sitetemplate={
@@ -136,16 +137,11 @@ const handleWilayaChange = useCallback(
   );
   const icon = (
     <Paper sx={{ m: 1 }} elevation={4}>
-      <Box component="svg" sx={{ width: 100, height: 100 }}>
-        <Box
-          component="polygon"
-          sx={{
-            fill: (theme) => theme.palette.common.white,
-            stroke: (theme) => theme.palette.divider,
-            strokeWidth: 1,
-          }}
-          points="0,100 50,00, 100,100"
-        />
+      <Box  sx={{ display: 'flex', textAlign:"center", justifyContent:'center',alignItems: "center",width: 100, height: 100 }}>
+        
+      <Typography  align="center" variant="h5"  gutterBottom>
+        Site Inserted
+      </Typography>
       </Box>
     </Paper>
   );

@@ -30,21 +30,18 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import VideoLabelIcon from '@mui/icons-material/VideoLabel';
 import GroupsIcon from '@mui/icons-material/Groups';
-import CellTowerIcon from '@mui/icons-material/CellTower';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import { Layout as DashboardLayout } from '@/layouts/dashboard/layout';
-import { CompanyCard } from '@/sections/companies/company-card';
-import { CompaniesSearch } from '@/sections/companies/companies-search';
 import { useDispatch, useSelector  } from "react-redux";
 import { sitesTech, selectSites, selectSitesLoad } from '@/features/site/siteSlice.js';
-import { dtSessions, selectDtSessions, selectDtSessionsLoad } from '@/features/driveTest/dtSessionSlice.js';
+import { dtSessions, selectDtSessions, selectDtSessionsLoad, selectDtsessionsRejected,selectCreatedDtSessions, create_dtSession } from '@/features/driveTest/dtSessionSlice.js';
 import { technicianUsers, selectTechnicianUsers, selectTechnicianUsersLoad} from '@/features/driveTest/technicianUsersSlice.js';
 import { usersPerGroups, selectUsersGroups, selectUsersGroupsLoad } from '@/features/driveTest/usersPerGroupsSlice.js';
-import { AccountProfileDetails } from '@/sections/companies/account-profile-details';
-import CSVReader from '@/components/CSVReader';
-import { OverviewLatestProducts } from '@/sections/overview/overview-latest-groups';
-import { OverviewTechnicians } from '@/sections/overview/overview-technicians';
+import { filteredSession, selectFilteredSession, selectFilteredSessionLoad } from '@/features/driveTest/filterSessionSlice.js';
+import { hasDtSessions, selectHasDtSessions, selectHasDtSessionsLoad } from '@/features/driveTest/hasDtSessionSlice.js';
+import { OverviewLatestGroups } from '@/components/overview-latest-groups';
+import { OverviewTechnicians } from '@/components/sections/overview/overview-technicians';
 import { subDays, subHours } from 'date-fns';
 import { ArrowForwardIos } from '@mui/icons-material';
 import { blue,grey } from '@mui/material/colors';
@@ -60,16 +57,7 @@ const ColorIconButton = styled(IconButton)(({ theme }) => ({
 
 
 
-function sliceIntoChunks(arr, chunkSize) {
-  const res = [];
-  for (let i = 0; i < arr.length; i += chunkSize) {
-      const chunk = arr.slice(i, i + chunkSize);
-      res.push(chunk);
-  }
-  return res;
-}
-
-const steps = ['Select drive test team','Select a site', 'Create a schedule', 'Assign drive tester'];
+const steps = ['Select drive test team','Select drive tester', 'Create a schedule'];
 function Page (){
   const now = new Date();
 
@@ -90,11 +78,18 @@ function Page (){
 
   const technicians=useSelector(selectTechnicianUsers);
   const techniciansLoading= useSelector(selectTechnicianUsersLoad);
+  
+  const filteredsessions= useSelector(selectFilteredSession);
+  const filteredsessionsLoading= useSelector(selectFilteredSessionLoad);
+
+  const hasdtsession=useSelector(selectHasDtSessions);
+  const hasdtsessionLoading= useSelector(selectHasDtSessionsLoad);
+  const [hasdtsessionsstate,setHasdtsessionsstate]=React.useState(hasdtsession);
   const handleSites = () => {
     //const { username, password } = {username, password};
             //setLoading(true);
     //const creds= { 'username':'helper101', 'password':'helper' };
-    dispatch(sitesTech()); 
+    dispatch(sitesTech('http://localhost:8000/sites/all/')); 
     dispatch(usersPerGroups());
     dispatch(dtSessions());
     dispatch(technicianUsers());
@@ -102,8 +97,7 @@ function Page (){
 
   useEffect(()=>{
      handleSites();
-     
-     setSitesLoadingState()
+    
     console.log(sites);
   },[]
     );
@@ -179,14 +173,10 @@ function Page (){
       console.log("hooo",jsonar['dt_team'])
      }
   },[usersgroupsLoading])
-const chunkedSites = sliceIntoChunks(sites,3);
 const [currentSites,setCurrentSites]=useState(sites)
 const [sitesLoadingState,setSitesLoadingState]=useState(sitesLoading)
 const [page, setPage] = useState(1);
-const handleChange = (event, value) => {
-  setCurrentSites(chunkedSites[page-1])
-  setPage(value);
-};
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -198,19 +188,69 @@ const style = {
   borderRadius: '30px',
   p: 4,
 };
-
+const [reset, setReset]=React.useState(false);
 const [activeStep, setActiveStep] = React.useState(0);
 const [completed, setCompleted] = React.useState({});
-const [schedulerState, setSchedulerState] = React.useState([]);
+const [schedulerState, setSchedulerState] = React.useState(filteredsessions ? filteredsessions : /*dtsessions ? dtsessions :*/ []);
+const [sessionsToPost,setSessionsToPost]=React.useState([]);
 const handleSchedulerStateChange=(schedulerstate)=>{
   console.log(schedulerstate,"hehehehehehe");
-  setSchedulerState(schedulerstate);
-}
+
+  setSchedulerState(schedulerstate.data);
+  
+  setSessionsToPost(schedulerstate.addedData);
+} 
+const handleHasSession=(site_id)=>{ 
+  console.log("hehehe");
+  dispatch(hasDtSessions(site_id));
+  
+  return hasdtsession
+};
+useEffect(()=>{
+    setHasdtsessionsstate(hasdtsession);
+
+},[hasdtsessionLoading]);
+const [selectedTechnician, setSelectedTechnician]= React.useState(null);
 const [selectedTeam,setSelectedTeam]=React.useState(null);
-const handleSelectedTeam=(selectedTeam)=>{
-  setSelectedTeam(selectedTeam);
-  console.log("position saved ",selectedTeam);
+const handleSelectedTeam=(selectedteam)=>{
+  setSelectedTeam(selectedteam);
 }
+const handleTechnicianSelected= (selectedtechnician) =>{
+  
+  setSelectedTechnician(selectedtechnician);
+  console.log("position saved ",selectedtechnician);
+  
+}
+
+useEffect(()=>{
+  if(selectedTeam && selectedTechnician){ 
+      dispatch(filteredSession({group_id: selectedTeam, technician_id: selectedTechnician}));
+      if(!filteredsessionsLoading) {
+        console.log("setting scheduler data state",filteredsessions);
+        setSchedulerState(filteredsessions);
+       /* setSchedulerState(state => state.filter(function(value,index,arr){
+          return !filteredsessions.includes(value) 
+      })
+      );*/ 
+      console.log("setSchedulerState(state => filteredsessions",schedulerState,filteredsessions);
+      } /*else {
+        setSchedulerState(state => state.filter(function(value,index,arr){
+            return !filteredsessions.includes(value)
+           
+        })
+        
+        );
+      console.log("been in else of filtering", schedulerState);
+      }*/
+    }
+
+},[selectedTeam,selectedTechnician,reset]);
+useEffect(()=>{
+  if(!filteredsessionsLoading) {
+    console.log("setting scheduler data state 2 ",filteredsessions);
+    setSchedulerState(filteredsessions);
+  }
+},[filteredsessionsLoading]);
 
 const totalSteps = () => {
   return steps.length;
@@ -225,6 +265,7 @@ const isLastStep = () => {
 };
 
 const allStepsCompleted = () => {
+  
   return completedSteps() === totalSteps();
 };
 
@@ -245,7 +286,14 @@ const handleBack = () => {
 const handleStep = (step) => () => {
   setActiveStep(step);
 };
+useEffect(()=>{
+  console.log("All steps completed",sessionsToPost);
 
+  if(allStepsCompleted() ){
+    console.log("All steps completed",sessionsToPost);
+    dispatch(create_dtSession(sessionsToPost));
+};
+},[activeStep]);
 const handleComplete = () => {
   const newCompleted = completed;
   newCompleted[activeStep] = true;
@@ -256,6 +304,7 @@ const handleComplete = () => {
 const handleReset = () => {
   setActiveStep(0);
   setCompleted({});
+  setReset(state => !state);
 };
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -307,9 +356,10 @@ function ColorlibStepIcon(props) {
 
   const icons = {
     1: <GroupsIcon />,
-    2: <CellTowerIcon />,
+    2: <EngineeringIcon />,
+   // 2: <CellTowerIcon />,
     3: <ScheduleIcon />,
-    4: <EngineeringIcon />
+    
   };
 
   return (
@@ -372,7 +422,7 @@ ColorlibStepIcon.propTypes = {
         {allStepsCompleted() ? (
           <React.Fragment>
             <Typography sx={{ mt: 2, mb: 1 }}>
-              All steps completed - you&apos;re finished
+              All steps completed - Drive test session Planned !
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Box sx={{ flex: '1 1 auto' }} />
@@ -385,14 +435,13 @@ ColorlibStepIcon.propTypes = {
               Step {activeStep + 1}
 
             </Typography>
-          {   (activeStep==0) ? (!usersgroupsLoading ? <><OverviewLatestProducts
-              products={groupsitems} saveSelectedPosition={handleSelectedTeam}
+          {   (activeStep==0) ? (!usersgroupsLoading ? <><OverviewLatestGroups
+              products={groupsitems} onSelectedTeam={handleSelectedTeam} currentSelectedTeam={selectedTeam}
               
             /> </> : <CircularProgress/> ):
-             (  activeStep==1 ? ( !techniciansLoading ? <OverviewTechnicians
-              products={technicians} 
+             (  activeStep==1 ? ( !techniciansLoading ? <OverviewTechnicians  products={technicians} onTechnicianSelected={handleTechnicianSelected} currentSelectedTechnician={selectedTechnician} 
               
-            /> :<CircularProgress/> )  : ( activeStep==2  ? ( !dtSessionsLoading ? <Scheduler onSchedulerStateChange={handleSchedulerStateChange} data={schedulerState} date={now}/>  :<CircularProgress/>):<CircularProgress/>))}
+            /> :<CircularProgress/> )  : ( activeStep==2  ? ( !dtSessionsLoading ? <Scheduler currentSelectedTechnician={selectedTechnician} currentSelectedTeam={selectedTeam} onSchedulerStateChange={handleSchedulerStateChange} data={schedulerState} date={now} sites={currentSites} onHasSession={handleHasSession} hasdtsession={hasdtsessionsstate}/>  :<CircularProgress/>):<CircularProgress/>))}
 
        
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>

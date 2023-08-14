@@ -15,12 +15,16 @@ import {
   Unstable_Grid2 as Grid
 } from '@mui/material';
 import { Layout as DashboardLayout } from '@/layouts/dashboard/layout';
-import { CompanyCard } from '@/sections/companies/company-card';
-import { CompaniesSearch } from '@/sections/companies/companies-search';
+import { SiteCard } from '@/components/sections/sites/site-card';
+import { CompaniesSearch } from '@/components/sections/sites/companies-search';
 import { useDispatch, useSelector  } from "react-redux";
-import { sitesTech, selectSites, selectSitesLoad } from '@/features/site/siteSlice.js';
-import { AccountProfileDetails } from '@/sections/companies/account-profile-details';
+import { sitesTech, selectSites, selectSitesLoad, selectNextPreviousPageUrl, selectPreviousPageUrl } from '@/features/site/siteSlice.js';
+import { SiteCreationDetailsPopper } from '@/components/sections/sites/site-creation-details';
 import CSVReader from '@/components/CSVReader';
+import {getSitesLastSession,selectSitesLastSessions,selectSitesLastSessionsLoad} from '@/features/site/siteSlice';
+
+
+
 const companies = [
   {
     id: '2569ce0d517a7f06d3ea1f24',
@@ -67,6 +71,7 @@ function sliceIntoChunks(arr, chunkSize) {
 }
 
 function Page (){
+  
   const dispatch = useDispatch();
   //const  {message}  = useSelector((state) => state.message);
   const [open, setOpen] = useState(false);
@@ -75,14 +80,20 @@ function Page (){
 
   const sites = useSelector(selectSites);
   const sitesLoading= useSelector(selectSitesLoad);
-  const handleSites = () => {
+  const previousNextUrls=useSelector(selectNextPreviousPageUrl);
+  const previousPageUrl=useSelector(selectPreviousPageUrl);
+  const handleSites = (_) => {
     //const { username, password } = {username, password};
             //setLoading(true);
     //const creds= { 'username':'helper101', 'password':'helper' };
-    dispatch(sitesTech()); 
+    dispatch(sitesTech(_)); 
   };
+const [page, setPage] = useState(1);
 
+const lastdatepersite=useSelector(selectSitesLastSessions);
+const lasdatepersiteLoading=useSelector(selectSitesLastSessionsLoad);
   useEffect(()=>{
+
      handleSites();
      setSitesLoadingState()
     console.log(sites);
@@ -91,16 +102,20 @@ function Page (){
     useEffect(()=>{
      setCurrentSites(sites)
      console.log("sites");
+     dispatch(getSitesLastSession());
    },[sites]
      );
-
+  
 
 const chunkedSites = sliceIntoChunks(sites,3);
 const [currentSites,setCurrentSites]=useState(sites)
 const [sitesLoadingState,setSitesLoadingState]=useState(sitesLoading)
-const [page, setPage] = useState(1);
+
+
 const handleChange = (event, value) => {
   setCurrentSites(chunkedSites[page-1])
+  handleSites( (value > page ) ? previousNextUrls : (value < page)?  previousPageUrl: null );
+
   setPage(value);
 };
 const style = {
@@ -124,7 +139,7 @@ const style = {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-        <AccountProfileDetails/>
+        <SiteCreationDetailsPopper/>
         </Box>
       </Modal>
     </div>
@@ -185,14 +200,14 @@ const style = {
             container
             spacing={3}
           >
-            {currentSites==null ? '' : currentSites.map((company) => (
+            {currentSites==null ? '' : currentSites.map((site) => (
               <Grid
                 xs={12}
                 md={6}
                 lg={4}
-                key={company.id}
+                key={site.id}
               >
-                <CompanyCard company={company} />
+                <SiteCard company={site} lastsessions={!lasdatepersiteLoading && lastdatepersite ? lastdatepersite : null} />
               </Grid>
             ))}
           </Grid>)}

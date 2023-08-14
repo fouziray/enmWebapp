@@ -26,7 +26,25 @@ import driveTestService from "@/services/drivetest.service.js";
     }
   }
 );
-
+export const create_dtSession= createAsyncThunk(
+  'dtsession/dtSessionsCreation',
+  async (sessions,thunkAPI) => {
+    try {
+      const data = await driveTestService.create_session(sessions);
+      const me={ createddtsession: data };
+      return me;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      thunkAPI.dispatch(setMessage(message));
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
 const initialState = { dtsession: [] };
 
   export const dtsessionsSlice = createSlice({
@@ -45,7 +63,20 @@ const initialState = { dtsession: [] };
         state.loading= false;
         console.log(state.loading);
 
+      }).addCase(create_dtSession.fulfilled,(state,action)=>{
+        state.createddtsessions=action.payload.createddtsession;
+        state.loading= false;
+        state.rejected= false;
+      }).addCase(create_dtSession.pending,(state,action)=>{
+        state.loading = true ;
+        state.rejected= false;
+      }).addCase(create_dtSession.rejected,(state,action)=>{
+        state.createddtsessions= action.payload;
+        state.rejected=true;
+        state.loading = false ;
+
       });
+      
      // [homeMessages.fulfilled]: (state, action) => {
      //   state.message = action.payload.messages;
      // },
@@ -54,4 +85,6 @@ const initialState = { dtsession: [] };
 });
 export const selectDtSessions = (state) => state.dtsession.dtsession;
 export const selectDtSessionsLoad = (state) => state.dtsession.loading;
+export const selectDtsessionsRejected=(state)=>state.dtsession.rejected;
+export const selectCreatedDtSessions=(state)=>state.dtsession.createddtsessions;
 export default  dtsessionsSlice.reducer;

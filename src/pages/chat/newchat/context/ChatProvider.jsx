@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import io from 'socket.io-client';
 
-const socket = io.connect('http://localhost:5173' || window.location.host);
+const socket = io.connect('http://localhost:5000' || window.location.host);
 
 const ChatContext = createContext();
 
