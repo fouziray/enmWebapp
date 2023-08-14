@@ -61,7 +61,6 @@ const ResourceEditor=(props) => {
   return <AppointmentForm.ResourceEditor {...props} />;
 }
 const Label=(props)=>{
-  console.log("type of props", props.text);
   let propscopy=JSON.parse(JSON.stringify(props));
   if (propscopy.text === 'Details') {
     propscopy.text='Choose a date'
@@ -77,7 +76,6 @@ const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }) => {
   const onCustomFieldChange = (nextValue) => {
     onFieldChange({ customField: nextValue });
   };
-  console.log("alhubiw a mezwarou",restProps,appointmentData);
   return (
     <AppointmentForm.BasicLayout
       appointmentData={appointmentData}
@@ -141,7 +139,6 @@ export default class Demo extends React.PureComponent {
           instances: sites_array,
         }],
       };
-      console.log("jejeej", this.state.data);
 
       this.onSchedulerStateChange=props.onSchedulerStateChange;
       this.currentSelectedTechnician=props.currentSelectedTechnician;
@@ -157,7 +154,6 @@ export default class Demo extends React.PureComponent {
 
     }
     static getDerivedStateFromProps(nextProps) {
-      console.log("nextProps", nextProps, nextProps.hasdtsession);
       return{ hasdtsession: nextProps.hasdtsession };  
     }
     doesOverlap(e1, e2){
@@ -171,24 +167,19 @@ export default class Demo extends React.PureComponent {
     }
     componentDidUpdate(prevProps) {
       // Typical usage (don't forget to compare props):
-      console.log("changed manaaaaannn");
 
       if (this.props.hasdtsession !== prevProps.hasdtsession) {
-        console.log("changed manaaaaannn",this.props.hasdtsession);
+        console.log("changed ",this.props.hasdtsession);
       }
     }
     changeAddedAppointment(addedAppointment) {
       this.setState({ addedAppointment });
       var a=this.hasSession(addedAppointment.siteId);
-      console.log("session 2 2 2 2",  a,  addedAppointment);
-
-
     }
     
     
     changeAppointmentChanges(appointmentChanges) {
       this.setState({ appointmentChanges });
-      console.log("has changed",appointmentChanges);
 
     }
   
@@ -199,25 +190,22 @@ export default class Demo extends React.PureComponent {
     commitChanges({ added, changed, deleted }) {
       
       this.setState((state) => {
-          console.log(deleted,"del");
         let { data } = state;
         let {addedData} = state;
         if (added) {
           const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
-          console.log("creation",startingAddedId, added,);
           let overlaps=false;
           this.doesOverlap
           for( var i = 0; i< data.length; i++ ) {
             overlaps=this.doesOverlap(data[i],added);
-            console.log("overlappingg in prediacte",overlaps);
+            console.log("overlappingg in predicate",overlaps);
             if( overlaps ){
               break;
             }
           }
           console.log(overlaps ? "overlaps" : "doesn't overlap");
 //          var a=this.hasSession(added.title);
-//        console.log("session 2 2 2 2",  a,  this.hasdtsession);
-//          if( a ) { console.log("session 2 3",  a,  this.hasdtsession);}
+//          if( a ) { console.log("session ",  a,  this.hasdtsession);}
           if(this.props.hasdtsession ){
             console.log("has a dt sesion ------------")
           }else{
@@ -240,7 +228,6 @@ export default class Demo extends React.PureComponent {
         }
         if (deleted !== undefined) {
           data = data.filter(appointment => appointment.id !== deleted);
-          console.log("deleted",data,deleted);
         }
         return { data, addedData };
       });
@@ -250,7 +237,6 @@ export default class Demo extends React.PureComponent {
       const {
         currentDate, data, resources,addedAppointment, appointmentChanges, editingAppointment, sites
       } = this.state;
-      console.log("adedededed",sites);
       return (
         <Paper>
           <Scheduler

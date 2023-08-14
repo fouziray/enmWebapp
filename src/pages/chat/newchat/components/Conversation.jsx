@@ -75,7 +75,6 @@ const Conversation = () => {
 
 useEffect(()=>{
       dispatch(conversationDetail('f219e53f30c04aec874d2968c788a125'));
-    console.log("redispatched 942fb11b3990426ca0145a10ec458684");
     },[]);
   const conversation = useSelector(selectConversation);
 

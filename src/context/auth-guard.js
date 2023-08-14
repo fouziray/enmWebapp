@@ -18,6 +18,7 @@ export const AuthGuard = (props) => {
   // This flow allows you to manually redirect the user after sign-out, otherwise this will be
   // triggered and will automatically redirect to sign-in page.
 
+  /* this is currently causing infinite rerenders uselocation doesn't work with useffect ? */
   useEffect(
     () => {
       

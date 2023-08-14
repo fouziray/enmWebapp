@@ -98,12 +98,10 @@ function Page (){
   useEffect(()=>{
      handleSites();
     
-    console.log(sites);
   },[]
     );
     useEffect(()=>{
      setCurrentSites(sites)
-     console.log("sites");
    },[sites]
      );
   var groupes = {
@@ -119,7 +117,6 @@ function Page (){
   const [groupsitems,setGroupsItems]= useState([]);
   useEffect(()=>{
     if (!usersgroupsLoading && usersgroups){
-      console.log(usersgroups[0],usersgroups[1]);
        
     
       for(var i in usersgroups[0]) {    

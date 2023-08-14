@@ -58,12 +58,10 @@ function Login() {
   const handleLogIn = (username,password) => {
     //const { username, password } = {username, password};
             //setLoading(true);
-    console.log("this is user", username, password);
     dispatch(login({ username, password }))
       .unwrap()
       .then(() => {
         setLoggedUi(true);
-        console.log("heiehe",);
         localStorage.setItem("user", JSON.stringify(userinfo))
 /*        if(isLoggedIn)
           handleLogin("/profile");

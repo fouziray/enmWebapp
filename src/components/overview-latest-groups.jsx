@@ -36,7 +36,6 @@ export const OverviewLatestGroups = (props) => {
 
   const refListGroups = React.useRef();
   const showSideDetailedMembers = (newPlacement,users,groupname) => (e)=> {
-    console.log("hihiihi");
     setAnchorEl(e.currentTarget);
     //setAnchorEl(refListGroups);
     setOpen((prev) =>  placement !== newPlacement || !prev);
@@ -48,12 +47,11 @@ export const OverviewLatestGroups = (props) => {
   }
 
   const RenderUsersInPopper =() =>{
-    console.log()
     return (
       <>
       {groupusersPopper.map(function(user){
             console.log(user);
-            <div>hihihi</div>
+       
           })}
           
       </>
@@ -76,7 +74,6 @@ export const OverviewLatestGroups = (props) => {
         {products.map((product, index) => {
           const hasDivider = index < products.length - 1;
           const ago = formatDistanceToNow(product.updatedAt);
-          console.log("hiaha",product.image);
           return (
             <ListItemButton ref={refListGroups}
               divider={hasDivider}
@@ -146,7 +143,6 @@ export const OverviewLatestGroups = (props) => {
           {groupusersPopper.map(function(user,index){
             const hasDivider = index < user.length - 1;
           
-            console.log("user",index);
             return( <>
             <ListItem
               divider={hasDivider}

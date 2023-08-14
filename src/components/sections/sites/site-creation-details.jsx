@@ -121,7 +121,6 @@ const handleChange = useCallback(
         ...prevState,
         [event.target.name]: event.target.value
       }));
-      console.log(event.target.name+" "+event.target.value);
       console.log(values)
     }
   );
@@ -131,8 +130,7 @@ const handleWilayaChange = useCallback(
         ...prevState,
         ["wilaya"]: event.target.value
       }));
-      console.log(event.target.name+" "+event.target.getOptionLabel);
-      console.log(values)
+      
     }
   );
   const icon = (
@@ -162,7 +160,7 @@ const handleWilayaChange = useCallback(
         console.log("finally made it !"+selectCreatedSite)
     })
       .catch(() => {
-        console.log("ow maaaaan !")
+        console.log("error !")
         //setLoading(false);
       });
     }
