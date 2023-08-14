@@ -51,7 +51,6 @@ const siteHasSession= async (siteid)=>{
   return response.data;
 };
 const create_session = async (values) => {
-  console.log("hello i'm creating site"+ values)
   const response = await axios
     .post(API_URL + 'dtsession/',values,config);
   return response.data;

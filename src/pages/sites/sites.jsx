@@ -101,7 +101,6 @@ const lasdatepersiteLoading=useSelector(selectSitesLastSessionsLoad);
     );
     useEffect(()=>{
      setCurrentSites(sites)
-     console.log("sites");
      dispatch(getSitesLastSession());
    },[sites]
      );

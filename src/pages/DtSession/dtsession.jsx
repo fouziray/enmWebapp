@@ -153,7 +153,6 @@ function Page (){
           
       }
       const items = Object.keys(jsonar).map(function(key) {
-        console.log("hoo2o",jsonar[key],key)
         const aa=jsonar[key].map(function(item, index){ return item.avatar})
         groupes.grp.push({ 
           id: groupnames[key],
@@ -166,8 +165,6 @@ function Page (){
         return jsonar[key];
     });
       setGroupsItems(groupes.grp);
-      console.log("hee",jsonar)
-      console.log("hooo",jsonar['dt_team'])
      }
   },[usersgroupsLoading])
 const [currentSites,setCurrentSites]=useState(sites)
@@ -191,14 +188,12 @@ const [completed, setCompleted] = React.useState({});
 const [schedulerState, setSchedulerState] = React.useState(filteredsessions ? filteredsessions : /*dtsessions ? dtsessions :*/ []);
 const [sessionsToPost,setSessionsToPost]=React.useState([]);
 const handleSchedulerStateChange=(schedulerstate)=>{
-  console.log(schedulerstate,"hehehehehehe");
 
   setSchedulerState(schedulerstate.data);
   
   setSessionsToPost(schedulerstate.addedData);
 } 
 const handleHasSession=(site_id)=>{ 
-  console.log("hehehe");
   dispatch(hasDtSessions(site_id));
   
   return hasdtsession
@@ -215,7 +210,6 @@ const handleSelectedTeam=(selectedteam)=>{
 const handleTechnicianSelected= (selectedtechnician) =>{
   
   setSelectedTechnician(selectedtechnician);
-  console.log("position saved ",selectedtechnician);
   
 }
 
@@ -223,13 +217,11 @@ useEffect(()=>{
   if(selectedTeam && selectedTechnician){ 
       dispatch(filteredSession({group_id: selectedTeam, technician_id: selectedTechnician}));
       if(!filteredsessionsLoading) {
-        console.log("setting scheduler data state",filteredsessions);
         setSchedulerState(filteredsessions);
        /* setSchedulerState(state => state.filter(function(value,index,arr){
           return !filteredsessions.includes(value) 
       })
       );*/ 
-      console.log("setSchedulerState(state => filteredsessions",schedulerState,filteredsessions);
       } /*else {
         setSchedulerState(state => state.filter(function(value,index,arr){
             return !filteredsessions.includes(value)
@@ -237,14 +229,12 @@ useEffect(()=>{
         })
         
         );
-      console.log("been in else of filtering", schedulerState);
       }*/
     }
 
 },[selectedTeam,selectedTechnician,reset]);
 useEffect(()=>{
   if(!filteredsessionsLoading) {
-    console.log("setting scheduler data state 2 ",filteredsessions);
     setSchedulerState(filteredsessions);
   }
 },[filteredsessionsLoading]);
@@ -284,7 +274,6 @@ const handleStep = (step) => () => {
   setActiveStep(step);
 };
 useEffect(()=>{
-  console.log("All steps completed",sessionsToPost);
 
   if(allStepsCompleted() ){
     console.log("All steps completed",sessionsToPost);

@@ -7,9 +7,7 @@ const getprofileAvatar= async (userid)=>{
 }
 
 const login = (username, password) => {
-    console.log("this is",  {
-    username,password
-  });
+    
   return axios
     .post(API_URL + "login/", {
       username,

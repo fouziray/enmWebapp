@@ -9,7 +9,6 @@ import conversationService from "@/services/conversation.service.js";
   'conversation/conversationDetail',
   async (conversation_id,thunkAPI) => {
     try {
-      console.log("been there1");
       //const conversation_id="1d92da5044554c4882c0624bdbc68f7b";
   
       const data = await conversationService.conversation(conversation_id);

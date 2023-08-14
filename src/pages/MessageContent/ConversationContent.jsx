@@ -19,7 +19,6 @@ function ConversationContent() {
 
   useEffect(()=>{
      handleMessages();
-    //console.log(conversation);
     
   },[]
     );

@@ -12,7 +12,6 @@ const sites = async (_) => {
     .catch(err => {
       console.log(err.response.data)
     })*/
-    console.log("s    jfjf",_);
   return response.data;
 };
 const get_sites_last_session= async () =>{
@@ -21,7 +20,6 @@ const get_sites_last_session= async () =>{
 }
 
 const create_site = async (values) => {
-  console.log("hello i'm creating site"+ values)
   const response = await axios
     .post(API_URL + 'sites/',values,config);
    /* .then((res) => { //this resolves the request here and no further in the slice
