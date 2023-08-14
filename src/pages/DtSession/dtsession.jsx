@@ -377,10 +377,10 @@ ColorlibStepIcon.propTypes = {
       component="main"
       sx={{
         flexGrow: 1,
-        py: 8
+        py: 8,
       }}
     >
-      <Container maxWidth="xl">
+      <Container  maxWidth="xl">
         <Stack spacing={3}  direction="column">
           <Stack
             direction="row"
@@ -418,7 +418,6 @@ ColorlibStepIcon.propTypes = {
         ) : (
           <React.Fragment>
             <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
-              Step {activeStep + 1}
 
             </Typography>
           {   (activeStep==0) ? (!usersgroupsLoading ? <><OverviewLatestGroups

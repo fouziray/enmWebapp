@@ -167,16 +167,6 @@ const style = {
               >
                 <CSVReader />
 
-                <Button
-                  color="inherit"
-                  startIcon={(
-                    <SvgIcon fontSize="small">
-                      <ArrowDownOnSquareIcon />
-                    </SvgIcon>
-                  )}
-                >
-                  Export
-                </Button>
               </Stack>
             </Stack>
             <div>
