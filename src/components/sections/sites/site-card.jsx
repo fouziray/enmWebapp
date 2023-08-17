@@ -14,7 +14,6 @@ export const SiteCard = (props) => {
 const  searchsite= () =>{
   if(lastsessions){
     for (var i=0;i<lastsessions.length;i++){
-      console.log("hehehehe");
       if(lastsessions[i]['site']=== company.site_id)
         return lastsessions[i]
     }

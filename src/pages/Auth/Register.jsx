@@ -2,6 +2,7 @@ import { Box, Stack, Typography, TextField, Button, Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef } from 'react';
 import AuthOutlet from './AuthOutlet';
+import AuthService from "@/services/auth.service";
 
 function Register() {
   const ad = useRef(null);
@@ -49,6 +50,8 @@ function Register() {
       password.current.focus();
     } else {
       // do register stuff
+      const data = await AuthService.signin(FirstName, FirstName, LastName, Email, Password, 'optimisateur').then((t)=>{navigate('/login')}).catch((reaseon) =>{      email.current.focus();
+      });
     }
   };
 

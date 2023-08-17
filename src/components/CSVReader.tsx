@@ -18,11 +18,9 @@ const CSVReader = () => {
     var jsonData = {};
     rowData?.map((data, i) => {
       jsonData[headers[i]]=data;
-      console.log(jsonData);
     })
     ta.push(jsonData);
   })
-    console.log(ta);
   return (
     <div>
       <CSVSelector onChange={(_data) => setData(_data)} />
@@ -40,11 +38,9 @@ const CSVReader = () => {
           var jsonData = {};
             {rowData?.map((data, i) => {
               jsonData[headers[i]]=data;
-              console.log(jsonData);
             })
             ta.push(jsonData);
             
-            console.log(ta);
             }
             return (
               <tr key={i}>

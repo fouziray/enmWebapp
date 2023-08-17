@@ -183,7 +183,8 @@ const style = {
               </Button>
             </div>
           </Stack>
-          <CompaniesSearch />       
+          <CompaniesSearch             backgroundColor={' rgb(14 116 144)'}
+/>       
 
           {sitesLoading ?  <CircularProgress /> : (<Grid
             container

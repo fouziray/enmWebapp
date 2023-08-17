@@ -38,7 +38,7 @@ export const Layout = (props) => {
               position: 'fixed',
               top: 0,
               width: '100%'
-            }}
+            }}Logo
           >
             <Box
               component={NextLink}
