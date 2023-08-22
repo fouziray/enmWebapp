@@ -14,10 +14,20 @@ import { OverviewTasksProgress } from '@/components/sections/overview/overview-t
 import { OverviewTotalCustomers } from '@/components/sections/overview/overview-total-customers';
 import { OverviewTotalProfit } from '@/components/sections/overview/overview-total-profit';
 import { OverviewTraffic } from '@/components/sections/overview/overview-traffic';
+import driveTestService from "@/services/drivetest.service.js";
+import  { useEffect, useState } from 'react';
 
 const now = new Date();
-
+ 
 function Page() {
+  const [stats,setStats]=useState(null);
+  const callstats= async()=>{
+    await driveTestService.statsDash().then(reponse=> {console.log("55555555555",reponse);setStats(reponse)})
+  }
+ useEffect( ()=>  {
+  callstats();
+  },[]);
+  
   return(
   <>
     <Box
@@ -36,13 +46,14 @@ function Page() {
             xs={12}
             sm={6}
             lg={3}
-          >
-            <OverviewBudget
-              difference={12}
-              positive
+          >{ stats ? <OverviewBudget
+              difference={stats.percentage}
+                positive={stats.percentage > 100 ? true : false}  
+
               sx={{ height: '100%' }}
-              value="$24k"
-            />
+              value={stats.lastweek}
+            /> : null }
+            
           </Grid>
           <Grid
             xs={12}

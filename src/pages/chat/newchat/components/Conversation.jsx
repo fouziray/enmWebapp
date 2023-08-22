@@ -70,11 +70,11 @@ const BotMessage = styled.div`
 
 
 
-const Conversation = () => {
+const Conversation = (props) => {
     const dispatch = useDispatch();
 
 useEffect(()=>{
-      dispatch(conversationDetail('f219e53f30c04aec874d2968c788a125'));
+      dispatch(conversationDetail(props.conversationId));
     },[]);
   const conversation = useSelector(selectConversation);
 

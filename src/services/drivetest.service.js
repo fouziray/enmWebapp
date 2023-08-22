@@ -55,13 +55,19 @@ const create_session = async (values) => {
     .post(API_URL + 'dtsession/',values,config);
   return response.data;
 };
+
+const statsDash= async ()=>{
+  const response= await axios.get(API_URL+'stats/');
+  return response.data;
+}
 const driveTestService = {
   usersPerGroups,
   dtSessions,
   technicianUsers,
   siteHasSession,
   dtSessionsFiltered,
-  create_session
+  create_session,
+  statsDash
 };
 
 //export  { messages };
