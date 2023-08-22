@@ -115,7 +115,7 @@ const ChatContainer = () => {
                                 </div>
                             </Header>
                             
-                            <Conversation />
+                            <Conversation conversationId={1} /*conversationId={currentRoom.id}*//>
             
                             <ChatForm />
                         </>

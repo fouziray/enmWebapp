@@ -129,10 +129,9 @@ const [roomsDt,setRoomsDt]=React.useState([]);
         if(currentRoom?.id === roomID) {
             return;
         }
-
         const selectedRoom = roomsDt.find(room => room.id === roomID);
         setCurrentRoom(selectedRoom);
-
+        console.log("ehehhehe",selectedRoom.id);
         joinRoom({ roomID, userName });
 
         setIsNavOpen(false);
