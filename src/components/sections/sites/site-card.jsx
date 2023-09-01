@@ -6,11 +6,28 @@ import NorthIcon from '@mui/icons-material/North';
 import EastIcon from '@mui/icons-material/East';
 import SouthIcon from '@mui/icons-material/South';
 import { formatDistanceToNow } from 'date-fns';
-
+import { deepPurple, red } from '@mui/material/colors';
+import { createTheme } from '@mui/material/styles';
 
 export const SiteCard = (props) => {
   const { company, lastsessions } = props;
- 
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        light: '#757ce8',
+        main: deepPurple['800'],
+        dark: '#002884',
+        contrastText: '#fff',
+      },
+      secondary: {
+        light: '#ff7961',
+        main: '#f44336',
+        dark: '#ba000d',
+        contrastText: '#000',
+      },
+    },
+  });
 const  searchsite= () =>{
   if(lastsessions){
     for (var i=0;i<lastsessions.length;i++){
@@ -20,6 +37,7 @@ const  searchsite= () =>{
   }
   return null;
 }  
+const accent = deepPurple['800']; // #e040fb
   
   return (
     <Card
@@ -30,8 +48,20 @@ const  searchsite= () =>{
       }}
     >
       <CardContent>
+      <Typography
+          align="left"
+          gutterBottom
+          variant="h6"
+        >
+{(company.UOP?.toUpperCase()==='CENTRE' | company.UOP?.toUpperCase()== 'CENTER' ) ?  <><Chip label={"CENTER"}  color={"success"} /></> : null}
+{(company.UOP?.toUpperCase()==='SOUTH' ) ? <><Chip label={"SOUTH"}  color="success" /></>: null}
+{(company.UOP?.toUpperCase()==='EAST' ) ?  <><Chip label={"EAST"}  sx={{color:"white",backgroundColor:"#15195A"}} /></>: null}
+
+</Typography>
+
         <Box
           sx={{
+            
             display: 'flex',
             justifyContent: 'center',
             pb: 3
@@ -91,7 +121,7 @@ const  searchsite= () =>{
             display="inline"
             variant="body2"
           >
-            { searchsite() ? formatDistanceToNow(new Date(searchsite().max)) : 'not tested yet' }
+            { searchsite() ? "last check "+formatDistanceToNow(new Date(searchsite().max)) : 'not tested yet' }
           </Typography>
         </Stack>
         

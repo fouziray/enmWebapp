@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 //import { withAuthGuard } from 'src/hocs/with-auth-guard';
 import { SideNav } from './side-nav';
 import { TopNav } from './top-nav';
+import { withAuthGuard } from '@/components/withAuthGuard';
 
 const SIDE_NAV_WIDTH = 280;
 
@@ -22,19 +23,14 @@ const LayoutContainer = styled('div')({
   width: '100%'
 });
 
-export const Layout = ((props) => {
+export const Layout = withAuthGuard((props) => {
   const { children } = props;
-  const pathname = usePathname();
   const [openNav, setOpenNav] = useState(false);
 
 
   return (
     <>
-      <TopNav onNavOpen={() => setOpenNav(true)} />
-      <SideNav
-        onClose={() => setOpenNav(false)}
-        open={openNav}
-      />
+     
       <LayoutRoot>
         <LayoutContainer>
           {children}

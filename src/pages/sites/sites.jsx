@@ -129,7 +129,12 @@ const style = {
   p: 4,
 };
   return(
+
   <>
+    <DashboardLayout>
+
+
+
     <div>
       <Modal
         open={open}
@@ -146,7 +151,8 @@ const style = {
       component="main"
       sx={{
         flexGrow: 1,
-        py: 8
+        py: 8,
+        backgroundColor: "#fbfbfb",
       }}
     >
       <Container maxWidth="xl">
@@ -217,6 +223,7 @@ const style = {
         </Stack>
       </Container>
     </Box>
+    </DashboardLayout>
   </>);
 };
 

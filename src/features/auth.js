@@ -36,7 +36,11 @@ const authSlice = createSlice({
   initialState,
   extraReducers: {
     [login.fulfilled]: (state, action) => {
-      state.isLoggedIn = true;
+      if( action.payload.user.admin || !re.payload.user.staff){
+        state.isLoggedIn = true;
+      }else{
+        state.isLoggedIn = false;
+      }
       state.user = action.payload.user;
       console.log("user" ,state.user, action.payload.user)
     },

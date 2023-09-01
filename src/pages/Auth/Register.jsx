@@ -8,8 +8,10 @@ function Register() {
   const ad = useRef(null);
   const soyad = useRef(null);
   const email = useRef(null);
+  const number = useRef(null);
   const password = useRef(null);
   const passwordConf = useRef(null);
+  const [image,setImage]=React.useState(null); 
   const navigate = useNavigate();
 
   const registerHandler = async (e) => {
@@ -50,18 +52,23 @@ function Register() {
       password.current.focus();
     } else {
       // do register stuff
-      const data = await AuthService.signin(FirstName, FirstName, LastName, Email, Password, 'optimisateur').then((t)=>{navigate('/login')}).catch((reaseon) =>{      email.current.focus();
+    
+      const data = await AuthService.signin(FirstName, FirstName, LastName, Email, Password, 'optimisateur',image).then((t)=>{navigate('/login')}).catch((reaseon) =>{
+              email.current.focus();
       });
     }
   };
-
+  const handleImageChange=(e)=>{
+    setImage(e.target.files[0]);
+    console.log("iagenae",image);
+  }
   /** Focus name input when component mounted. */
   useEffect(() => {
     ad.current.focus();
   }, []);
 
   return (
-    <AuthOutlet header={"FASTTEST"}>
+    <AuthOutlet header={"Drive test assist"}>
       <Stack direction="row" gap={3} sx={{ alignItems: 'center' }}>
         <TextField
           inputRef={ad}
@@ -86,6 +93,13 @@ function Register() {
         autoComplete="off"
       />
       <TextField
+        inputRef={number}
+        type="text"
+        label="Phone number"
+        variant="outlined"
+        autoComplete="off"
+      />
+      <TextField
         inputRef={password}
         type="password"
         autoComplete="new-password"
@@ -105,6 +119,8 @@ function Register() {
 >
         Import Photo
         <input
+        onChange={handleImageChange}
+        id="image"
     type="file"
     hidden
   />

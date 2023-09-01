@@ -4,6 +4,7 @@ const useChatActions = () => {
     const { socket } = useChat();
 
     const joinRoom = (roomID) => {
+        console.log("thhhhhhhhhh",roomID);
         socket.emit('join-room', roomID);
     }
 

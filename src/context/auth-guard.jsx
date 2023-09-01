@@ -9,25 +9,29 @@ export const AuthGuard = (props) => {
   //const { isAuthenticated } = useAuthContext();
   const [checked, setChecked] = useState(false);
   let location= useLocation();
-    const { isLoggedIn } = useSelector((state) => state.auth);
+    const { isLoggedIn , user } = useSelector((state) => state.auth);
   
     const navigate = useNavigate();
-  
+    const ignore = useRef(false);
+
   
   // Only do authentication check on component mount.
   // This flow allows you to manually redirect the user after sign-out, otherwise this will be
   // triggered and will automatically redirect to sign-in page.
 
-  /* this is currently causing infinite rerenders uselocation doesn't work with useffect ? */
   useEffect(
     () => {
-      
-
+      if (ignore.current) {
+        return;
+      }
+      ignore.current = true;
 
       if (!isLoggedIn) {
         console.log('Not authenticated, redirecting');
         navigate('/login');   
       } else {
+        console.log(' authenticated, children1',user);
+
         setChecked(true);
       }
     },
@@ -35,11 +39,13 @@ export const AuthGuard = (props) => {
   );
 
   if (!checked) {
+    console.log(' authenticated, children2');
     return null;
   }
 
   // If got here, it means that the redirect did not occur, and that tells us that the user is
   // authenticated / authorized.
+  console.log(' authenticated, children3');
 
   return children;
 };

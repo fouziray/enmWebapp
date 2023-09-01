@@ -15,7 +15,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import AuthOutlet from './AuthOutlet';
 import { login, selectIsLoggedIn, selectUser } from "@/features/auth";
 import { useDispatch, useSelector } from "react-redux";
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 function Login() {
   const userinfo=useSelector(selectUser);
   const { isLoggedIn } = useSelector((state) => state.auth);
@@ -31,6 +35,15 @@ function Login() {
       navigate('/profile');   
   }
   const [loggedUi,setLoggedUi]=useState(false);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(()=>{
     if(isLoggedIn )
@@ -59,9 +72,12 @@ function Login() {
     //const { username, password } = {username, password};
             //setLoading(true);
     dispatch(login({ username, password }))
-      .unwrap()
-      .then(() => {
+      .then((re) => {
         setLoggedUi(true);
+        if(!re.payload.user.admin && !re.payload.user.staff){
+          handleClickOpen();
+        }
+        console.log("------------------",re.payload.user.admin);
         localStorage.setItem("user", JSON.stringify(userinfo))
 /*        if(isLoggedIn)
           handleLogin("/profile");
@@ -82,11 +98,33 @@ function Login() {
   }, []);
 
   return (
-    <AuthOutlet header={"FASTTEST"}>
+    <AuthOutlet header={"Drive Test Assist"}>
+ 
+       <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"You're a tester "}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+          You don't have staff's permission to access this site.
+          please use mobile app for authentication
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
       <TextField
         inputRef={email}
         type="text"
-        label="E-mail"
+        label="Username"
         variant="outlined"
         autoComplete="off"
       />
@@ -112,14 +150,8 @@ function Login() {
               </InputAdornment>
             ),
           }}
-        />
-        <Link
-          variant="body2"
-          textAlign="right"
-          onClick={() => navigate('/forgot-password')}
-        >
-          Forgot password?
-        </Link>
+        />        <Box sx={{ height:'10px' }}/>
+
 
         <Button variant="contained" onClick={loginHandler}>
           Sign in
@@ -127,7 +159,7 @@ function Login() {
       </Stack>
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         <Typography variant="body2" component="p">
-          Dont you have an account?
+          You don't have an account?
         </Typography>
         <Link
           variant="body2"

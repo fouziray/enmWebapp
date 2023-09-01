@@ -3,7 +3,6 @@ import { Stack, useTheme, Typography } from '@mui/material';
 import { FormSX } from './Auth.styles';
 import { createTheme } from '@mui/material/styles';
 import CellTowerIcon from '@mui/icons-material/CellTower';
-
 const themess = createTheme({
   palette: {
     logocolor: {
@@ -23,11 +22,10 @@ function AuthOutlet({ children, header }) {
           border: `1px solid ${theme.palette.grey.border}`,
           background: theme.palette.grey[50],
         }}
-      ><CellTowerIcon color={themess.palette.logocolor.light} />
+      >
         {header ? (
-          <Typography color={themess.palette.logocolor.light} textAlign="center" variant="h2">
-            {header} 
-          </Typography>
+                  <img  src={'http://localhost:5173/assets/logo.png'} />
+       
         ) : (
           <img
             src={

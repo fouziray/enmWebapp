@@ -60,6 +60,13 @@ const statsDash= async ()=>{
   const response= await axios.get(API_URL+'stats/');
   return response.data;
 }
+
+const todayssessions=async ()=>{
+  const response= await axios.get(API_URL+'dtsession/today/',config);
+  return response.data;
+}
+
+
 const driveTestService = {
   usersPerGroups,
   dtSessions,
@@ -67,7 +74,8 @@ const driveTestService = {
   siteHasSession,
   dtSessionsFiltered,
   create_session,
-  statsDash
+  statsDash,
+  todayssessions
 };
 
 //export  { messages };

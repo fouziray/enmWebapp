@@ -10,16 +10,25 @@ import ChatApp from '@/pages/chat/newchat/appchat';
 import Sites from '@/pages/sites/sites';
 import Dtest from '@/pages/DtSession/dtsession';
 import SideBar from  '@/components/sidebar/sideBar.jsx';
+import UserDetail from '@/pages/accountInfo/account.jsx';
+import { Layout as DashboardLayout } from '@/layouts/dashboard/layout';
+
 
 function Routing() {
+
+  const getLayout = (<Sites/>).getLayout ?? ((page) => page);
+   
   return (
     <Routes>
-      <Route path="*" element={<><SideBar/><Home /></>} />
       <Route path="/login/*" element={<Login />} />
       <Route path="/register/*" element={<Register />} />
-      <Route path="/chat/" element={<><SideBar/><ChatApp/></>} />
+      
+      <Route path="*" element={<DashboardLayout><><SideBar/><Home /></></DashboardLayout>} />
+    
+      <Route path="/chat/" element={<DashboardLayout><><SideBar/><ChatApp/></></DashboardLayout>} />
       <Route path="/sites" element={<><SideBar/><Sites/></>}/>
-      <Route path="/drivetest" element={<><SideBar/><Dtest/></>} />
+      <Route path="/userDetails" element={<><SideBar/><UserDetail /></>}/>
+      <Route path="/drivetest" element={<DashboardLayout><><SideBar/><Dtest/></></DashboardLayout>} />
 
     </Routes>
   );

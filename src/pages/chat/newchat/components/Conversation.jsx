@@ -76,7 +76,7 @@ const Conversation = (props) => {
 
 useEffect(()=>{
       dispatch(conversationDetail(props.conversationId));
-    },[]);
+    },[props]);
   const conversation = useSelector(selectConversation);
 
   const isConversationLoading= useSelector(selectConversationLoading);
@@ -105,6 +105,7 @@ useEffect(()=>{
             {
                 messages.map((m) => {
                     const { text, author, socket_id, id } = m;
+                    console.log("this issss"+m.text);
 
                     const isBot = (author === 'BOT');
                     

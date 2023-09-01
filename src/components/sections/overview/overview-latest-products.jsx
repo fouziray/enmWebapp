@@ -22,7 +22,7 @@ export const OverviewLatestProducts = (props) => {
 
   return (
     <Card sx={sx}>
-      <CardHeader title="Latest Products" />
+      <CardHeader title="Today's tests" />
       <List>
         {products.map((product, index) => {
           const hasDivider = index < products.length - 1;
@@ -39,7 +39,7 @@ export const OverviewLatestProducts = (props) => {
                     ? (
                       <Box
                         component="img"
-                        src={product.image}
+                        src={"http://localhost:8000"+product.image}
                         sx={{
                           borderRadius: 1,
                           height: 48,

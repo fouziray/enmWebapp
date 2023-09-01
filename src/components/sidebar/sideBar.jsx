@@ -9,11 +9,15 @@ import {useNavigate } from 'react-router-dom';
 import { usePopover } from '@/hooks/use-popover';
 
 import { AccountPopover } from '@/components/account-popover';
+import { logout, selectIsLoggedIn, selectUser } from "@/features/auth";
+
+
 
 const SideBar = () => {
   const accountPopover = usePopover();
 
   const dispatch = useDispatch();
+  const user= useSelector(selectUser);
   const mode = useSelector(selectMode);
   const navigate=useNavigate();  
   const navigateHome=()=>{
@@ -28,6 +32,7 @@ const SideBar = () => {
   const navigateHelpTesters=()=>{
     navigate("/chat")
   }
+  console.log("hsss",user);
     return (
       <div className=" drop-shadow-md fixed top-0 left-0 h-screen w-16 m-0
                       flex flex-col 
@@ -44,7 +49,7 @@ const SideBar = () => {
                 height: 40,
                 width: 40
               }}
-              src={localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user"))?.avatar?.avatar : "/assets/avatars/avatar-anika-visser.png" }
+              src={user ? "http://localhost:8000"+user.avatar.avatar : localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user"))?.avatar?.avatar : "/assets/avatars/avatar-anika-visser.png" }
             />} />
 
        

@@ -21,8 +21,24 @@ const now = new Date();
  
 function Page() {
   const [stats,setStats]=useState(null);
+  const [todaysSessions,setTodaysSessions]= useState(null);
   const callstats= async()=>{
-    await driveTestService.statsDash().then(reponse=> {console.log("55555555555",reponse);setStats(reponse)})
+    await driveTestService.statsDash().then(reponse=> {setStats(reponse)});
+    await driveTestService.todayssessions().then(reponse=> {
+      reponse.map(item =>{
+        item.image=item.avatar;
+        item.name= item.title;
+        item.updatedAt=Date.parse(item.startDate);
+        
+
+      }
+       );
+       console.log("reponse",reponse)
+
+      
+      setTodaysSessions(reponse)
+    }
+    );
   }
  useEffect( ()=>  {
   callstats();
@@ -30,6 +46,7 @@ function Page() {
   
   return(
   <>
+
     <Box
       component="main"
       sx={{
@@ -38,6 +55,25 @@ function Page() {
       }}
     >
       <Container maxWidth="xl">
+      <Stack
+  direction="row"
+  justifyContent="space-between"
+  spacing={4}
+>
+  <Stack spacing={1}>
+    <Typography variant="h4">
+      Drive test Stats
+    </Typography>
+    <Stack
+      alignItems="center"
+      direction="row"
+      spacing={1}
+    >
+
+    </Stack>
+  </Stack>
+ 
+</Stack>
         <Grid
           container
           spacing={3}
@@ -45,7 +81,7 @@ function Page() {
           <Grid
             xs={12}
             sm={6}
-            lg={3}
+            lg={6}
           >{ stats ? <OverviewBudget
               difference={stats.percentage}
                 positive={stats.percentage > 100 ? true : false}  
@@ -55,107 +91,42 @@ function Page() {
             /> : null }
             
           </Grid>
+     
           <Grid
             xs={12}
             sm={6}
-            lg={3}
+            lg={6}
           >
-            <OverviewTotalCustomers
-              difference={16}
-              positive={false}
-              sx={{ height: '100%' }}
-              value="1.6k"
-            />
-          </Grid>
-          <Grid
-            xs={12}
-            sm={6}
-            lg={3}
-          >
+            { stats ?
             <OverviewTasksProgress
               sx={{ height: '100%' }}
-              value={75.5}
-            />
+              value={Math.round(stats.taskProgress)}
+            /> : null
+          }
           </Grid>
+         
+         
           <Grid
             xs={12}
-            sm={6}
-            lg={3}
-          >
-            <OverviewTotalProfit
-              sx={{ height: '100%' }}
-              value="$15k"
-            />
-          </Grid>
-          <Grid
-            xs={12}
-            lg={8}
-          >
-            <OverviewSales
-              chartSeries={[
-                {
-                  name: 'This year',
-                  data: [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20]
-                },
-                {
-                  name: 'Last year',
-                  data: [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13]
-                }
-              ]}
+            md={6}
+            lg={6}
+          >{stats ?   <OverviewTraffic
+              chartSeries={[stats.testsPerUOP[0].number, stats.testsPerUOP[1].number, stats.testsPerUOP[2].number]}
+              labels={['Centre', 'EAST', 'CENTER']}
               sx={{ height: '100%' }}
             />
+: null}
           </Grid>
           <Grid
             xs={12}
             md={6}
-            lg={4}
-          >
-            <OverviewTraffic
-              chartSeries={[63, 15, 22]}
-              labels={['Desktop', 'Tablet', 'Phone']}
-              sx={{ height: '100%' }}
-            />
-          </Grid>
-          <Grid
-            xs={12}
-            md={6}
-            lg={4}
-          >
+            lg={6}
+          >{todaysSessions ?
             <OverviewLatestProducts
-              products={[
-                {
-                  id: '5ece2c077e39da27658aa8a9',
-                  image: '/assets/products/product-1.png',
-                  name: 'Healthcare Erbology',
-                  updatedAt: subHours(now, 6).getTime()
-                },
-                {
-                  id: '5ece2c0d16f70bff2cf86cd8',
-                  image: '/assets/products/product-2.png',
-                  name: 'Makeup Lancome Rouge',
-                  updatedAt: subDays(subHours(now, 8), 2).getTime()
-                },
-                {
-                  id: 'b393ce1b09c1254c3a92c827',
-                  image: '/assets/products/product-5.png',
-                  name: 'Skincare Soja CO',
-                  updatedAt: subDays(subHours(now, 1), 1).getTime()
-                },
-                {
-                  id: 'a6ede15670da63f49f752c89',
-                  image: '/assets/products/product-6.png',
-                  name: 'Makeup Lipstick',
-                  updatedAt: subDays(subHours(now, 3), 3).getTime()
-                },
-                {
-                  id: 'bcad5524fe3a2f8f8620ceda',
-                  image: '/assets/products/product-7.png',
-                  name: 'Healthcare Ritual',
-                  updatedAt: subDays(subHours(now, 5), 6).getTime()
-                }
-              ]}
+              products={todaysSessions}
               sx={{ height: '100%' }}
-            />
+            /> : null 
+          }
           </Grid>
         </Grid>
       </Container>

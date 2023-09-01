@@ -9,6 +9,11 @@ import { filteredSession, selectFilteredSession, selectFilteredSessionLoad } fro
 import { useDispatch, useSelector  } from "react-redux";
  import {selectUser } from '@/features/auth';
  import userService from '@/services/user.service';
+ import { formatDistanceToNow } from 'date-fns';
+
+const now = new Date();
+
+
 const RoomListContainer = styled.div`
     --space: 1em;
     --horizontal-space: 2vw;
@@ -85,7 +90,7 @@ const RoomList = ({ query, isNavOpen, setIsNavOpen }) => {
 
   const filteredsessionsLoading= useSelector(selectFilteredSessionLoad);
 useEffect(()=>{
-  userService.getuserGroupNumber(user.id).then(value=>{
+  userService.getuserGroupNumber(user?.id).then(value=>{
           dispatch(filteredSession({group_id: value.data[0].groups__id, technician_id: null})).then((response) =>console.log("this is responding",response));
   
     });
@@ -97,7 +102,7 @@ const [roomsDt,setRoomsDt]=React.useState([]);
         _=JSON.parse(JSON.stringify(filteredsessions))
         _.map((room)=>{
             room.name=room.technicien.username;
-            room.description=room.dtTeam.name +', start at '+room.startDate;
+            room.description=room.dtTeam.name +', started since '+ formatDistanceToNow( new Date(room.startDate).getTime());
             room.src= 'https://assets.website-files.com/581c85345d7e0501760aa7db/5b17ab5cc6215ef0331908fd_Creative%20Ways%20to%20Build%20Community%20at%20Your%20Gym.jpg';
             room.src= 'http://localhost:8000'+room.avatar.avatar;
         })

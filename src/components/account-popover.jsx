@@ -3,21 +3,31 @@ import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Box, Divider, MenuItem, MenuList, Popover, Typography } from '@mui/material';
 //import { useAuth } from 'src/hooks/use-auth';
+import {useNavigate } from 'react-router-dom';
+import { logout, selectIsLoggedIn, selectUser } from "@/features/auth";
+import { useDispatch, useSelector } from "react-redux";
 
 export const AccountPopover = (props) => {
+  const dispatch = useDispatch();
+
   const { anchorEl, onClose, open } = props;
   //const router = useRouter();
- /* const auth = useAuth();
+ // const auth = useAuth();
 
-  const handleSignOut = useCallback(
-    () => {
-      onClose?.();
-      auth.signOut();
-      router.push('/auth/login');
-    },
-    [onClose, auth, router]
-  ); */
+  const handleSignOut = ()=>{
 
+      //onClose?.();
+      //auth.signOut();
+      //router.push('/auth/login');
+      dispatch(logout());
+      navigate('/login');
+  }; 
+
+  const navigate = useNavigate();  
+
+  const gotoDetails=()=>{
+    navigate("/userDetails");
+  };
   return (
     <Popover
       anchorEl={anchorEl}
@@ -56,8 +66,11 @@ export const AccountPopover = (props) => {
           }
         }}
       >
-        <MenuItem >
+        <MenuItem onClick={handleSignOut}>
           Sign out
+        </MenuItem>
+        <MenuItem  onClick={  gotoDetails }>
+        Account informations
         </MenuItem>
       </MenuList>
     </Popover>

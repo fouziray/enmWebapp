@@ -83,10 +83,10 @@ const iconMap = {
 export const OverviewTraffic = (props) => {
   const { chartSeries, labels, sx } = props;
   const chartOptions = useChartOptions(labels);
-
+  const sum= chartSeries.reduce((partialSum, a) => partialSum + a, 0);
   return (
     <Card sx={sx}>
-      <CardHeader title="Traffic Source" />
+      <CardHeader title="Tests per region " />
       <CardContent>
         <Chart
           height={300}
@@ -125,7 +125,7 @@ export const OverviewTraffic = (props) => {
                   color="text.secondary"
                   variant="subtitle2"
                 >
-                  {item}%
+                  {Math.round((item/sum)*100)}%
                 </Typography>
               </Box>
             );

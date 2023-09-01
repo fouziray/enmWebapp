@@ -5,8 +5,6 @@ import { Box, Divider, MenuItem, MenuList, Popover, Typography } from '@mui/mate
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open } = props;
-  const router = useRouter();
-  const auth = useAuth();
 
   /*const handleSignOut = useCallback(
     () => {
