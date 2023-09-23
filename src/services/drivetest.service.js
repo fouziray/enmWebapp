@@ -1,7 +1,10 @@
 import axios from 'axios';
 const API_URL = 'http://localhost:8000/';
-const config = {
+const config2 = {
   headers: { Authorization: localStorage.getItem("token") ? 'Token '+JSON.parse(localStorage.getItem("token")).token : '' }
+};
+const config = {
+  headers: { Authorization: 'Token baea926188b9207219b62f0cda6c90a67f24c78c' }
 };
 const usersPerGroups = async () => {
   const response = await axios

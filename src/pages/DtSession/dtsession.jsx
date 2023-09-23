@@ -46,6 +46,10 @@ import { subDays, subHours } from 'date-fns';
 import { ArrowForwardIos } from '@mui/icons-material';
 import { blue,grey } from '@mui/material/colors';
 import Scheduler from '@/components/schedulingDt/scheduler';
+import {selectisadmin} from '@/features/auth';
+
+import Alert from '@mui/material/Alert';
+
 const ColorIconButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[100]),
   backgroundColor: grey[100],
@@ -187,6 +191,12 @@ const [activeStep, setActiveStep] = React.useState(0);
 const [completed, setCompleted] = React.useState({});
 const [schedulerState, setSchedulerState] = React.useState(filteredsessions ? filteredsessions : /*dtsessions ? dtsessions :*/ []);
 const [sessionsToPost,setSessionsToPost]=React.useState([]);
+const isadmin=useSelector(selectisadmin);
+
+const [showalert,setShowAlert]=useState(false);
+
+
+
 const handleSchedulerStateChange=(schedulerstate)=>{
 
   setSchedulerState(schedulerstate.data);
@@ -390,6 +400,7 @@ ColorlibStepIcon.propTypes = {
              <Typography variant="h4">
                 Drive Test Sessions
               </Typography>
+              { showalert ? <Alert severity="error">You don't have administration's permisson to alter scheduler state !</Alert> : null}
         
          
         </Stack>
@@ -426,7 +437,7 @@ ColorlibStepIcon.propTypes = {
             /> </> : <CircularProgress/> ):
              (  activeStep==1 ? ( !techniciansLoading ? <OverviewTechnicians  products={technicians} onTechnicianSelected={handleTechnicianSelected} currentSelectedTechnician={selectedTechnician} 
               
-            /> :<CircularProgress/> )  : ( activeStep==2  ? ( !dtSessionsLoading ? <Scheduler currentSelectedTechnician={selectedTechnician} currentSelectedTeam={selectedTeam} onSchedulerStateChange={handleSchedulerStateChange} data={schedulerState} date={now} sites={currentSites} onHasSession={handleHasSession} hasdtsession={hasdtsessionsstate}/>  :<CircularProgress/>):<CircularProgress/>))}
+            /> :<CircularProgress/> )  : ( activeStep==2  ? ( !dtSessionsLoading ? <Scheduler currentSelectedTechnician={selectedTechnician} currentSelectedTeam={selectedTeam} onSchedulerStateChange={handleSchedulerStateChange} data={schedulerState} date={now} sites={currentSites} onHasSession={handleHasSession} hasdtsession={hasdtsessionsstate} setShowAlert={setShowAlert} admin={isadmin} />  :<CircularProgress/>):<CircularProgress/>))}
 
        
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>

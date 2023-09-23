@@ -36,7 +36,7 @@ const signin= (username,firstname,lastname,email,password,fonction,image)=>{
   return axios.post(API_URL+'users/',{username:username,first_name:firstname,last_name:lastname,email:email,password:password,fonction:fonction})
   .then(async(response)=>{
     console.log("inserted");
-//    await axios.post(API_URL+'profile/?id='+response.data["id"]) // removed for reducing inscription 
+    //await axios.post(API_URL+'profile/?id='+response.data["id"]) // removed for reducing inscription 
   });
 }
 const get_token= (username,password)=>{

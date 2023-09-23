@@ -101,10 +101,13 @@ const [roomsDt,setRoomsDt]=React.useState([]);
             let _=[]
         _=JSON.parse(JSON.stringify(filteredsessions))
         _.map((room)=>{
-            room.name=room.technicien.username;
+            room.name=room.technicien.username + " in "+room.title;
             room.description=room.dtTeam.name +', started since '+ formatDistanceToNow( new Date(room.startDate).getTime());
             room.src= 'https://assets.website-files.com/581c85345d7e0501760aa7db/5b17ab5cc6215ef0331908fd_Creative%20Ways%20to%20Build%20Community%20at%20Your%20Gym.jpg';
-            room.src= 'http://localhost:8000'+room.avatar.avatar;
+            if(room.avatar==""){
+                room.src= 'http://localhost:8000'+"/static/default.jpg";
+            }else{
+            room.src= 'http://localhost:8000'+room.avatar.avatar;}
         })
         setRoomsDt(_);
         console.log("state",_);
@@ -114,7 +117,7 @@ const [roomsDt,setRoomsDt]=React.useState([]);
     const { joinRoom } = useChatActions();
     const { currentRoom, setCurrentRoom, userName } = useChat();
 
-
+    
     const filteredRooms = useMemo(() => {
         const filter = roomsDt.filter(room => {
             const includesCaseInsensitive  = {
@@ -148,8 +151,8 @@ const [roomsDt,setRoomsDt]=React.useState([]);
             <h3>Rooms</h3>
 
             <ul>
-                {   
-                    roomsDt.map(room=>{
+                {  
+                    filteredRooms.map(room=>{
                         const { id, name, src, description} = room;
                         return (
                         <RoomItem active={ currentRoom?.id === id } key={ id } onClick={ () => handleRoomClick(id) }>
@@ -163,20 +166,7 @@ const [roomsDt,setRoomsDt]=React.useState([]);
                     );})}
                     {
 
-                    filteredRooms.map(room => {
-                        const { id, name, src, description} = room;
-
-                        return (
-                            <RoomItem active={ currentRoom?.id === id } key={ id } onClick={ () => handleRoomClick(id) }>
-                                <img alt='room-img' src={ src } />
-
-                                <div>
-                                    <span>{ name }</span>
-                                    <Description color='rgba(254,254,254,0.5)' size='0.7em'>{ description }</Description>
-                                </div>
-                            </RoomItem>
-                        );
-                    })
+                 
                 }
             </ul>
         </RoomListContainer>

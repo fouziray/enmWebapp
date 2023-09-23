@@ -36,17 +36,17 @@ const authSlice = createSlice({
   initialState,
   extraReducers: {
     [login.fulfilled]: (state, action) => {
-      if( action.payload.user.admin || !re.payload.user.staff){
-        state.isLoggedIn = true;
-      }else{
-        state.isLoggedIn = false;
-      }
+      if( action.payload.user.admin || action.payload.user.staff){
+      state.isLoggedIn = true;
+    }
+      state.admin=action.payload.user.admin
       state.user = action.payload.user;
       console.log("user" ,state.user, action.payload.user)
     },
     [login.rejected]: (state, action) => {
       state.isLoggedIn = false;
       state.user = null;
+      console.log("rejected");
     },
     [logout.fulfilled]: (state, action) => {
       state.isLoggedIn = false;
@@ -56,5 +56,6 @@ const authSlice = createSlice({
 });
 export const selectIsLoggedIn = (state) => state.auth.isLoggedIn;
 export const selectUser= (state) => state.auth.user;
+export const selectisadmin=(state) => state.auth.admin;
 const { reducer } = authSlice;
 export default reducer;

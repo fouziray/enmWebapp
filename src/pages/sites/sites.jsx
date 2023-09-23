@@ -18,12 +18,13 @@ import { Layout as DashboardLayout } from '@/layouts/dashboard/layout';
 import { SiteCard } from '@/components/sections/sites/site-card';
 import { CompaniesSearch } from '@/components/sections/sites/companies-search';
 import { useDispatch, useSelector  } from "react-redux";
-import { sitesTech, selectSites, selectSitesLoad, selectNextPreviousPageUrl, selectPreviousPageUrl } from '@/features/site/siteSlice.js';
+import { sitesTech, selectSites, selectSitesLoad, selectNextPreviousPageUrl, selectPreviousPageUrl, selectPagenumber } from '@/features/site/siteSlice.js';
 import { SiteCreationDetailsPopper } from '@/components/sections/sites/site-creation-details';
 import CSVReader from '@/components/CSVReader';
 import {getSitesLastSession,selectSitesLastSessions,selectSitesLastSessionsLoad} from '@/features/site/siteSlice';
-
-
+import {selectisadmin} from '@/features/auth';
+import Alert from '@mui/material/Alert';
+import siteService from "@/services/site.service.js";
 
 const companies = [
   {
@@ -75,13 +76,22 @@ function Page (){
   const dispatch = useDispatch();
   //const  {message}  = useSelector((state) => state.message);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    if(isadmin){
+      setOpen(true);
+    }else{
+      setShowAlert(true);
+      console.log("noo");
+    }
+  }
   const handleClose = () => setOpen(false);
 
   const sites = useSelector(selectSites);
   const sitesLoading= useSelector(selectSitesLoad);
   const previousNextUrls=useSelector(selectNextPreviousPageUrl);
+  const pagescouunt=useSelector(selectPagenumber);
   const previousPageUrl=useSelector(selectPreviousPageUrl);
+  const isadmin=useSelector(selectisadmin);
   const handleSites = (_) => {
     //const { username, password } = {username, password};
             //setLoading(true);
@@ -109,8 +119,10 @@ const lasdatepersiteLoading=useSelector(selectSitesLastSessionsLoad);
 const chunkedSites = sliceIntoChunks(sites,3);
 const [currentSites,setCurrentSites]=useState(sites)
 const [sitesLoadingState,setSitesLoadingState]=useState(sitesLoading)
-
-
+const [showalert,setShowAlert]=useState(false);
+const handlesearchtext=(text)=>{
+  handleSites(siteService.API_URL+"sitesfiltered/?q="+text);
+}
 const handleChange = (event, value) => {
   setCurrentSites(chunkedSites[page-1])
   handleSites( (value > page ) ? previousNextUrls : (value < page)?  previousPageUrl: null );
@@ -174,6 +186,8 @@ const style = {
                 <CSVReader />
 
               </Stack>
+              { showalert ? <Alert severity="error">You don't have administration's permisson !</Alert> : null}
+
             </Stack>
             <div>
               <Button
@@ -189,7 +203,7 @@ const style = {
               </Button>
             </div>
           </Stack>
-          <CompaniesSearch             backgroundColor={' rgb(14 116 144)'}
+          <CompaniesSearch    onchangetext={handlesearchtext}         backgroundColor={' rgb(14 116 144)'}
 />       
 
           {sitesLoading ?  <CircularProgress /> : (<Grid
@@ -214,7 +228,7 @@ const style = {
             }}
           >
             <Pagination
-              count={3}
+              count={Math.round(pagescouunt/6) +1 }
               size="small"
               page={page}
               onChange={handleChange}

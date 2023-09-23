@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef } from 'react';
 import AuthOutlet from './AuthOutlet';
 import AuthService from "@/services/auth.service";
-
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 function Register() {
   const ad = useRef(null);
   const soyad = useRef(null);
@@ -67,6 +71,13 @@ function Register() {
     ad.current.focus();
   }, []);
 
+  const [age, setAge] = React.useState('');
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+
+
   return (
     <AuthOutlet header={"Drive test assist"}>
       <Stack direction="row" gap={3} sx={{ alignItems: 'center' }}>
@@ -99,6 +110,15 @@ function Register() {
         variant="outlined"
         autoComplete="off"
       />
+            <RadioGroup
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+      >
+        <FormControlLabel value="optimisateur" control={<Radio />} label="optimisateur" />
+        <FormControlLabel value="integrateur" control={<Radio />} label="integrateur" />
+       
+      </RadioGroup>
       <TextField
         inputRef={password}
         type="password"

@@ -112,7 +112,7 @@ function Page() {
             lg={6}
           >{stats ?   <OverviewTraffic
               chartSeries={[stats.testsPerUOP[0].number, stats.testsPerUOP[1].number, stats.testsPerUOP[2].number]}
-              labels={['Centre', 'EAST', 'CENTER']}
+              labels={['SOUTH', 'EAST', 'CENTER']}
               sx={{ height: '100%' }}
             />
 : null}

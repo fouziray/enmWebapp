@@ -64,6 +64,7 @@ const initialState = { sites: [] };
         state.sites = action.payload.sites.results ? action.payload.sites.results : action.payload.sites;
         console.log('State:', state.sites);
         state.loading= false;
+        state.pagesNumber=action.payload.sites.count;
         
       })
       .addCase(getSitesLastSession.pending, (state,action)=>{
@@ -84,4 +85,6 @@ export const selectSites = (state) => state.sites.sites;
 export const selectSitesLoad= (state) => state.sites.loading;
 export const selectNextPreviousPageUrl= (state)=>   state.sites.nextPageUrl  ;
 export const selectPreviousPageUrl=(state)=>state.sites.previousPageUrl;
+export const selectPagenumber=(state)=>state.sites.pagesNumber;
+
 export default  sitesSlice.reducer;

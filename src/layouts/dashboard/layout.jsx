@@ -5,7 +5,7 @@ import { SideNav } from './side-nav';
 import { TopNav } from './top-nav';
 import { withAuthGuard } from '@/components/withAuthGuard';
 
-const SIDE_NAV_WIDTH = 280;
+const SIDE_NAV_WIDTH = 20;
 
 const LayoutRoot = styled('div')(({ theme }) => ({
   display: 'flex',

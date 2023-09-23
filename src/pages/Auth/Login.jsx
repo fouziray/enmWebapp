@@ -74,10 +74,12 @@ function Login() {
     dispatch(login({ username, password }))
       .then((re) => {
         setLoggedUi(true);
-        if(!re.payload.user.admin && !re.payload.user.staff){
+        localStorage.setItem("admin",payload.user.admin);
+
+        if(!re.payload.user.admin){
           handleClickOpen();
         }
-        console.log("------------------",re.payload.user.admin);
+        console.log("------------------",re.payload.user.admin,re.payload.user.staff);
         localStorage.setItem("user", JSON.stringify(userinfo))
 /*        if(isLoggedIn)
           handleLogin("/profile");

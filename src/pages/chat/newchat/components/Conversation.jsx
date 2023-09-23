@@ -92,7 +92,7 @@ useEffect(()=>{
 //event.action_name ? event.action_name : event.intent_name ? event.intent_name : 'hi'
     return (
         <ConversationContainer ref={ chatConversation }>
-            {conversation.map((event,index)=>(<> {event.action_name ?<BotMessage> { event.data.action_text ? event.data.action_text : event.action_name  } </BotMessage>: 
+            {conversation.map((event,index)=>(<> {(event.action_name || event.type_name=='bot')  ?<BotMessage> { event.data.text?  event.data.text : event.data.action_text ? event.data.action_text : event.action_name  } </BotMessage>: 
             <MessageContainer key={ index } incomingMessage={ true }>
             <UserProfile content={ 'author' } />
             <MessageContent>{ event.data.text }</MessageContent>

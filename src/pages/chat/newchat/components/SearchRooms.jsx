@@ -2,7 +2,7 @@ import React from 'react';
 import { BiReset } from 'react-icons/bi';
 import styled from 'styled-components';
 import { ButtonContainer } from '../styled/Button';
-
+import {useEffect} from 'react';
 const SearchRoomsContainer = styled.div`
     display: flex;
     background: #fff;
@@ -22,6 +22,10 @@ const SearchRoomsContainer = styled.div`
 `;
 
 const SearchRooms = ({ query, setQuery }) => { 
+    useEffect(()=>{
+        setQuery(' ');
+    },[])
+    
     return (
         <SearchRoomsContainer>
             <input type="text" placeholder='Search' value={ query } onChange={(e) => setQuery(e.target.value) } />

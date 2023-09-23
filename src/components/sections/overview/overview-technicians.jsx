@@ -54,7 +54,7 @@ export const OverviewTechnicians = (props) => {
               <Grid item xs={12}  md={2}
             lg={2} >
 
-              { product.profile__avatar ? <Avatar alt="44" src={"http://localhost:8000/static/"+product.profile__avatar} /> : <></>}
+              { product.profile__avatar ? <Avatar alt="44" src={"http://localhost:8000/static/"+product.profile__avatar  } /> : <> <Avatar alt="44" src={"http://localhost:8000/static/"+"profile_images/default.jpg"  } /> </>}
               </Grid><Grid item xs={12}  md={6}
             lg={6}>
 

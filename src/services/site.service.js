@@ -34,6 +34,7 @@ const siteService = {
   sites,
   create_site,
   get_sites_last_session,
+  API_URL,
 };
 
 //export  { messages };

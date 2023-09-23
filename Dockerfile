@@ -8,6 +8,8 @@ copy pnpm-lock.yaml ./
 RUN npm install -g pnpm
 RUN pnpm install
 RUN pnpm install --save-dev postcss-import
+COPY socket-server-team-chat/package*.json ./
+RUN npm install
 # Copy the rest of the application code to the container
 ARG REACT_APP_HOSTBACKEND_URL
 
@@ -26,4 +28,5 @@ EXPOSE 5173
 CMD ["ls","dist"]
 CMD ["pnpm","build"]
 CMD ["pnpm", "preview"]
+CMD ["node","socket-server-team-chat/server.js"]
 #ENTRYPOINT ["node", "src/main.jsx"]

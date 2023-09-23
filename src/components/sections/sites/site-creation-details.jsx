@@ -151,9 +151,13 @@ const handleWilayaChange = useCallback(
       const te=techsInBasket.map(function(i){return { "type": i, "state":"ACTIVE"}})
       const st=JSON.stringify(Object.entries({site_id: values.site_id,wilaya: values.wilaya,UOP: values.UOP, managedObject: te}))
       values.managedObject=te
+      const l=[];
+      l.push(values);
+      console.log("heeee",l);
       localStorage.setItem("userData", values);
       event.preventDefault();
-      dispatch(sitesCreationTech(values))
+
+      dispatch(sitesCreationTech(l))
       .unwrap()
       .then(() => {
         setChecked((prev) => !prev);

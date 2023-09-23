@@ -139,7 +139,8 @@ export default class Demo extends React.PureComponent {
           instances: sites_array,
         }],
       };
-
+      this.setShowAlert=props.setShowAlert;
+      this.admin=props.admin;
       this.onSchedulerStateChange=props.onSchedulerStateChange;
       this.currentSelectedTechnician=props.currentSelectedTechnician;
       this.currentSelectedTeam=props.currentSelectedTeam;
@@ -173,13 +174,25 @@ export default class Demo extends React.PureComponent {
       }
     }
     changeAddedAppointment(addedAppointment) {
+      if(this.admin){
       this.setState({ addedAppointment });
       var a=this.hasSession(addedAppointment.siteId);
+      }
+      else{
+        this.setShowAlert(true);
+      }
+
     }
     
     
     changeAppointmentChanges(appointmentChanges) {
-      this.setState({ appointmentChanges });
+      if(this.admin){
+        this.setState({ appointmentChanges });
+
+        }
+        else{
+          this.setShowAlert(true);
+        }
 
     }
   
